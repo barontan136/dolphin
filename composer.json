@@ -1,0 +1,16 @@
+{
+    "require": {
+        "workerman/workerman": "v3.3.4",
+        "apache/log4php": "2.3.0",
+        "catfan/medoo": "v1.4.5"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    },
+    "autoload": {
+    	"classmap": ["Config", "Modules", "Tables", "Handlers", "Utils", "Tests", "Validate"]
+    }
+}

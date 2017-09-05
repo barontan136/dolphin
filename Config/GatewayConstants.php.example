@@ -1,0 +1,51 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lenovo
+ * Date: 2016/11/16
+ * Time: 10:21
+ */
+namespace Config;
+
+class GatewayConstants
+{
+    const LISTEN_URI = 'http://0.0.0.0:9999';
+    // DES_CBC加密KEY及IV
+    const DES_SCRET_KEY = '333333@';
+    // DES_CBC加密KEY及IV经RSA加密后的内容，客户端取得此值后用公钥解密后得到DES_SCET_KEY的值
+    const RSA_PRIVATE_KEY = 'cHTds77777717DbQecCl1GO1joy9c6mXBDK/ne+E5AVZFgaHXU9PTEnZvrLt8hjjlM/+lFdHPOnughgsCVfhdWiQb561G9htAYoE6xqHQA7YCC078=';
+
+    const API_NODE = array();
+    // 0-WEB, 1-WAP, 2-AOS, 3-IOS, 99-ADMIN
+    const RPC_API_NODE = array(
+        1 => array(
+            '3.0.0' => GatewayConstants::API_NODE,
+            '3.0.1' => GatewayConstants::API_NODE,
+            '3.0.2' => GatewayConstants::API_NODE,
+        ),
+        2 => array(
+            '3.0.0' => GatewayConstants::API_NODE,
+            '3.0.1' => GatewayConstants::API_NODE,
+            '3.0.2' => GatewayConstants::API_NODE,
+            '3.0.3' => GatewayConstants::API_NODE,
+        ),
+        3 => array(
+            '3.0.0' => GatewayConstants::API_NODE,
+        ),
+        99 => array(
+            '3.0.2' => GatewayConstants::API_NODE,
+        ),
+    );
+
+    const UN_ENCRYPT_API = array (
+        'AppInit' => array(
+            'getInfo'
+        ),
+        'TimerTask' => array(
+            'test',
+        ),
+        'AdminRequest' => array(
+            'orderPaid',
+        )
+    );
+}

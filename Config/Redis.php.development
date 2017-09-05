@@ -1,0 +1,14 @@
+<?php
+namespace Config;
+
+class Redis {
+	/**
+	*开发环境
+	*/
+    public static $redis1 = array(
+        'host'       => 'localhost',
+        'port'       => '6381',
+        'password'   => '123'
+    );
+}
+

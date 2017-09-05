@@ -1,0 +1,13 @@
+<?php
+
+namespace Config;
+
+class Task {
+    public static $config = array(
+
+        'User'          => array(
+            'address'   => 'Text://127.0.0.1:10130',
+            'workers'   => 1,
+        ),
+    );
+}

@@ -1,0 +1,19 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: haichang
+ * Date: 2017/6/8
+ * Time: 14:37
+ */
+
+namespace Config;
+
+
+class JPushConfig
+{
+    const IOS_APP_KEY = 'sss';
+    const IOS_MASTER_SECRET = 'sss';
+
+    const AOS_APP_KEY = 'ss';
+    const AOS_MASTER_SECRET = 'ss';
+}

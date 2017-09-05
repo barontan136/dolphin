@@ -1,0 +1,12 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lenovo
+ * Date: 2017/8/11
+ * Time: 9:49
+ */
+namespace Config;
+
+class WebSocket {
+    public static $register = '127.0.0.1:22000';
+}
