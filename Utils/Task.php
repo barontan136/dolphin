@@ -1,8 +1,6 @@
 <?php
 namespace Utils;
 use Exception;
-use Validate\AutoValidate;
-use Validate\ValidateException;
 use Workerman\Worker;
 
 use Config\Task as TaskConfig;
