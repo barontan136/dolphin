@@ -11,6 +11,6 @@
         }
     },
     "autoload": {
-    	"classmap": ["Config", "Modules", "Tables", "Handlers", "Utils", "Tests", "Validate"]
+    	"classmap": ["Config", "Modules", "Tables", "Handlers", "Utils", "Tests"]
     }
 }
