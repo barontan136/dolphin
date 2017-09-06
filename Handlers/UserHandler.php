@@ -20,19 +20,19 @@ class UserHandler
     }
 
     /**
-     * 用户注册
+     * 用户信息
      * @param object $oInput
      * @return mixed|string
      */
-    public function userRegister($oInput)
+    public function getUserInfo($oInput)
     {
-        $device_id  = $oInput->get('device_id', ''); //设备惟一标识
+        $user_id  = $oInput->get('user_id', ''); //设备惟一标识
 
         $errcode = '000000';
         $response = [];
         do {
-
-
+            $user_info = $this->user->getUserInfo($user_id);
+            $response = $user_info;
         } while(false);
 
         return Response::api_response(

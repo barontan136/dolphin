@@ -10,7 +10,7 @@ class UserTable extends UserBase
 {
     public function __construct()
     {
-        $this->setPrefix("ol_");
+        $this->setPrefix("lz_");
         $this->setTable('users');
         $this->setPk('user_id');
         $this->setTableInId(99);
@@ -29,6 +29,19 @@ class UserTable extends UserBase
         }else{
             return $this->medoo->select($this->table(),$field,$where);
         }
+    }
+
+    /**
+     * 根据用户uid返回用户相关信息
+     * @param string $user_id
+     * @param string | array $field
+     * @return mixed
+     */
+    public function getUserInfoByUserId($user_id, $field='*')
+    {
+        return $this->medoo->get($this->table(),
+            $field,
+            array('user_id' => $user_id));
     }
 
 }
