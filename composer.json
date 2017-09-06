@@ -2,7 +2,7 @@
     "require": {
         "workerman/workerman": "v3.3.4",
         "apache/log4php": "2.3.0",
-        "catfan/medoo": "v1.4.5"
+        "catfan/medoo": "v1.1.2"
     },
     "repositories": {
         "packagist": {

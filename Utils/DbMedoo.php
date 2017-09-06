@@ -39,11 +39,11 @@ class DbMedoo
      */
     public static function instance($config_name)
     {
-        /*
+
         if (!isset(DbConfig::$$config_name)) {
             throw new Exception("\\Config\\Db::$config_name not set\n");
         }
-        */
+
 
         if (empty(self::$instance[$config_name])) {
             $config = DbConfig::$$config_name;

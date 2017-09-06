@@ -11,16 +11,16 @@ class Task extends Worker
 
     public function __construct($name, $handlerClass)
     {
-        /*
+
         if (!array_key_exists($name, TaskConfig::$config)) {
             printf("config not found Module:%s\n", $name);
             exit(250);
         }
-        $config = TaskConfig::$config[$name];*/
-        $config = array(
+        $config = TaskConfig::$config[$name];
+        /*$config = array(
             'address'   => 'Text://127.0.0.1:10130',
             'workers'   => 1,
-        );
+        );*/
         $uri = $config['address']; //地址
         $this->count = max(intval($config['workers']), 1); //进程熟练
 
