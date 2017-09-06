@@ -11,11 +11,16 @@ class Task extends Worker
 
     public function __construct($name, $handlerClass)
     {
+        /*
         if (!array_key_exists($name, TaskConfig::$config)) {
             printf("config not found Module:%s\n", $name);
             exit(250);
         }
-        $config = TaskConfig::$config[$name];
+        $config = TaskConfig::$config[$name];*/
+        $config = array(
+            'address'   => 'Text://127.0.0.1:10130',
+            'workers'   => 1,
+        );
         $uri = $config['address']; //地址
         $this->count = max(intval($config['workers']), 1); //进程熟练
 
@@ -47,20 +52,6 @@ class Task extends Worker
                 if (method_exists($this->handler, $jArr['a'])) {
                     $oInput = new WorkerInput($jArr['r'], $jArr['c']);
 
-                    $validclass = sprintf("Validate\\%sValidate", $this->name);
-                    $autoValid = new AutoValidate();
-                    $autoValid->globalValidate($jArr['r']);
-                    if (class_exists($validclass)
-                        && array_key_exists($jArr['a'], $validclass::$validRule)
-                    ) {
-                        $autoValid->settingValidate($validclass::$validRule[$jArr['a']]);
-                        if ($this->name != 'AdminRequest'
-                            && !in_array($jArr['a'], $validclass::$unAccessValidList)
-                        ) {
-                            $autoValid->accessValidate($jArr['r']);
-                        }
-                        $autoValid->autoValidate($jArr['r']);
-                    }
                     $jRetStr = call_user_func_array(
                         array($this->handler, $jArr['a']), array($oInput)
                     );
@@ -71,14 +62,6 @@ class Task extends Worker
                     ));
                 }
                 $this->logger->info(sprintf('[%s][output][%s]', $sAction, $jRetStr));
-                $connection->send($jRetStr);
-            } catch (ValidateException $ex) {
-                $jRetStr = json_encode(array(
-                    'return_code' => $ex->getValidCode(),
-                    'return_message' => $ex->getMessage(),
-                ));
-
-                $this->logger->info(sprintf('[%s][output][%s]', $sAction, $jRetStr), $ex);
                 $connection->send($jRetStr);
             } catch (Exception $ex) {
                 $jRetStr = json_encode(array(
