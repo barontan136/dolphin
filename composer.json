@@ -1,6 +1,7 @@
 {
     "require": {
         "workerman/workerman": "v3.3.4",
+        "workerman/gateway-worker" : ">=3.0.0",
         "apache/log4php": "2.3.0",
         "catfan/medoo": "v1.1.2"
     },
@@ -11,6 +12,6 @@
         }
     },
     "autoload": {
-    	"classmap": ["Config", "Modules", "Tables", "Handlers", "Utils","Bootstrap", "Tests"]
+    	"classmap": ["Config", "Modules", "Tables", "Handlers", "Utils","Bootstrap", "websocket", "Tests"]
     }
 }
