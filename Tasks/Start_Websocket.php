@@ -6,10 +6,10 @@ defined('MODULE_NAME') || define('MODULE_NAME', 'WebSocket');
 
 use Workerman\Worker;
 
-$arr_files = glob(__DIR__.'/../websocket/start*.php');
+$arr_files = glob(dirname(__DIR__).'/websocket/start*.php');
 var_dump($arr_files);
 // 加载所有Applications/*/start.php，以便启动所有服务
-foreach(glob(__DIR__.'/../websocket/start*.php') as $start_file)
+foreach($arr_files as $start_file)
 {
     var_dump($start_file);
     require_once $start_file;
