@@ -11,5 +11,9 @@ foreach(glob(__DIR__.'/websocket/start*.php') as $start_file)
 {
     require_once $start_file;
 }
+
+// 标记是全局启动
+define('GLOBAL_START', 1);
+
 // 运行所有服务
 Worker::runAll();
