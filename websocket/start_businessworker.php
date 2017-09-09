@@ -17,7 +17,6 @@ require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 
 use \Workerman\Worker;
 use \GatewayWorker\BusinessWorker;
-use \Workerman\Autoloader;
 
 // bussinessWorker 进程
 $worker = new BusinessWorker();
