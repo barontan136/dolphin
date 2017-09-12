@@ -38,7 +38,7 @@ class Events
     public static function OnConnect($client_id)
     {
         // debug
-        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
+        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onConnect:''\n";
 
         // 从房间的客户端列表中删除
         if(isset($_SESSION['room_id']))
@@ -85,6 +85,7 @@ class Events
                 $client_name = htmlspecialchars($message_data['client_name']);
                 $_SESSION['room_id'] = $room_id;
                 $_SESSION['client_name'] = $client_name;
+                var_dump(json_encode($_SESSION));
               
                 // 获取房间内所有用户列表 
                 $clients_list = Gateway::getClientSessionsByGroup($room_id);
