@@ -61,6 +61,7 @@ class Events
         
         // 客户端传递的是json数据
         $message_data = json_decode($message, true);
+        var_dump($message_data);
         if(!$message_data)
         {
             return ;
@@ -77,6 +78,7 @@ class Events
                 // 判断是否有房间号
                 if(!isset($message_data['room_id']))
                 {
+                    var_dump($message_data);
                     throw new \Exception("\$message_data['room_id'] not set. client_ip:{$_SERVER['REMOTE_ADDR']} \$message:$message");
                 }
                 
