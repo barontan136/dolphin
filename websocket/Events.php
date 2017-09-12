@@ -30,6 +30,24 @@ use \GatewayWorker\Lib\Gateway;
 
 class Events
 {
+
+    /**
+     * 当客户端断开连接时
+     * @param integer $client_id 客户端id
+     */
+    public static function OnConnect($client_id)
+    {
+        // debug
+        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
+
+        // 从房间的客户端列表中删除
+        if(isset($_SESSION['room_id']))
+        {
+            $room_id = $_SESSION['room_id'];
+            $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>date('Y-m-d H:i:s'));
+            Gateway::sendToGroup($room_id, json_encode($new_message));
+        }
+    }
    
    /**
     * 有消息时
