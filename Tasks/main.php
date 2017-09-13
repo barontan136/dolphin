@@ -29,8 +29,7 @@ $http->count = 10;
 $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     //开始时间
     list($startmicro, $startsecond) = explode(' ', microtime());
-    // $logger->info($data['post']);
-	//$logger->info($data);//输出HTTP输出相关信息
+
     $jArr = $data['post'];
     $logger->info(sprintf('[input][raw] [%s]', Logging::json_pretty($jArr)));
     $aResult = [];
@@ -64,19 +63,18 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         ));
 
     };
-    $module = trim($jArr['m']); //模块名称
-    $action = trim($jArr['a']); //方法名称
-    $params = $jArr['r']; //请求参数,DES_CBC加密
-    $token = $jArr['t']; //上次服务端返回给客户端的token
-    $ver = $jArr['v']; //客户端版本号
-    $pla = intval($jArr['p']); //客户端平台类型,0-WEB, 1-WAP, 2-AOS, 3-IOS, 99-ADMIN
+
+    $module = trim($jArr['m']);     //模块名称
+    $action = trim($jArr['f']);     //方法名称
+    $params = $jArr['r'];           //请求参数,DES_CBC加密
+    $token = $jArr['t'];            //上次服务端返回给客户端的token
+    $ver = $jArr['v'];              //客户端版本号
+    $pla = intval($jArr['p']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
 
     //获取客户端ip
-    $IP = isset($data['server']['HTTP_REMOTEIP'])
-        ? $data['server']['HTTP_REMOTEIP']
-        : $data['server']['REMOTE_ADDR'];
+    $IP = isset($data['server']['HTTP_REMOTEIP']) ? $data['server']['HTTP_REMOTEIP'] : $data['server']['REMOTE_ADDR'];
 
-    if (!isset($jArr['m']) && !isset($jArr['a'])
+    if (!isset($jArr['m']) && !isset($jArr['f'])
         && !isset($jArr['r']) && !isset($jArr['t'])
         && !isset($jArr['v']) && !isset($jArr['p'])
     ) {
@@ -87,10 +85,10 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         );
         $newArr = array('a'=>$action, 'r'=>$params, 'c'=>[
             'ip'       => $IP,
-            'token'    => $token, //上次服务端返回给客户端的token
-            'module'   => $module, //模块名称
-            'version'  => $ver, //客户端版本号
-            'platform' => $pla, //客户端平台类型,0-WEB, 1-WAP, 2-AOS, 3-IOS, 99-ADMIN
+            'token'    => $token,   //上次服务端返回给客户端的token
+            'module'   => $module,  //模块名称
+            'version'  => $ver,     //客户端版本号
+            'platform' => $pla,     //客户端平台类型,0-WEB, 1-AOS, 2-IOS
         ]);
         return $output($connection, 'NOTFOUND', 'NOTFOUND', $aResult, $des, $isEncrypt, $newArr);
     }
@@ -100,7 +98,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         'ip'       => $IP,
         'token'    => $token, //上次服务端返回给客户端的token
         'module'   => $module, //模块名称
-        'version'  => $ver, //客户端版本号
+        'version'  => $ver, //客户端版本号 1.0.0
         'platform' => $pla, //客户端平台类型,0-WEB, 1-WAP, 2-AOS, 3-IOS, 99-ADMIN
     ]);
 
@@ -138,7 +136,9 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
             $aResult['token'] = Token::getToken();
             return $output($connection, $module, $action, $aResult, $des, $isEncrypt, $newArr);
         };
+
         $task->connect();
+
     } catch (\Exception $e) {
         $logger->info(sprintf("[Exception][%s][%s][%s][%s]", $module, $action, $isEncrypt, $params));
         $aResult = array(

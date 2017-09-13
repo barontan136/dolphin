@@ -47,13 +47,13 @@ class Task extends Worker
                 } else {
                     $jStr = '';
                 }
-                $sAction = isset($jArr['a']) ? $jArr['a'] : 'notexists';
+                $sAction = isset($jArr['f']) ? $jArr['f'] : 'notexists';
                 $this->logger->info(sprintf('[%s][input][%s]', $sAction, $data));
-                if (method_exists($this->handler, $jArr['a'])) {
+                if (method_exists($this->handler, $jArr['f'])) {
                     $oInput = new WorkerInput($jArr['r'], $jArr['c']);
 
                     $jRetStr = call_user_func_array(
-                        array($this->handler, $jArr['a']), array($oInput)
+                        array($this->handler, $jArr['f']), array($oInput)
                     );
                 } else {
                     $jRetStr = json_encode(array(
