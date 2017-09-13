@@ -38,6 +38,10 @@ class WebsocketHandler
         do {
             $user_info = $this->user->getUserInfo($user_id);
             $response = $user_info;
+
+            $_SESSION['room_id'] = $room_id;
+            $_SESSION['client_name'] = $user_info['user_name'];
+
         } while(false);
         var_dump($response);
 
@@ -62,11 +66,18 @@ class WebsocketHandler
         $to_user_id  = $oInput->get('toUid ', '0');     // 发送消息的对象
         $msg  = $oInput->get('msg  ', '');              // 消息内容
 
+        // 登陆时保存的room_id
+        $back_room_id = $_SESSION['room_id'];
+        if ($back_room_id != $room_id){
+            var_dump('room is not same, check it~');
+        }
+
         $errcode = '0';
         $response = [];
         do {
             $user_info = $this->user->getUserInfo($user_id);
             $response = $user_info;
+
         } while(false);
         var_dump($response);
 

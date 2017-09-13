@@ -71,9 +71,9 @@ class Events
 
         // 需要发送到房间的接口列表
         $cmds_send_to_group = array(
-            '0' => 'login',
-            '1' => 'sendMsg',
-            '2' => 'sendGift'
+            '0' => 'Login',
+            '1' => 'SendMsg',
+            '2' => 'SendGift'
         );
 
         // 调用相应的socket方法
@@ -88,6 +88,7 @@ class Events
             Gateway::sendToCurrentClient($jRetStr);
             if (in_array($cmd, $cmds_send_to_group)
                 && ($room_id = $oInput->get('rid', 0)) > 0){
+                    var_dump('send to group');
                     Gateway::sendToGroup($room_id, $jRetStr);
             }
         } else {
