@@ -79,8 +79,8 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         && !isset($jArr['v']) && !isset($jArr['p'])
     ) {
         $aResult = array(
-            "return_code" => "10003",
-            "return_message" => "参数不完整",
+            "errno" => "10003",
+            "msg" => "参数不完整",
             'token' => Token::getToken(),
         );
         $newArr = array('a'=>$action, 'r'=>$params, 'c'=>[
@@ -142,8 +142,8 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     } catch (\Exception $e) {
         $logger->info(sprintf("[Exception][%s][%s][%s][%s]", $module, $action, $isEncrypt, $params));
         $aResult = array(
-            "return_code" => "10001",
-            "return_message" => sprintf(
+            "errno" => "10001",
+            "msg" => sprintf(
                 "module:%s, action:%s, Exception:%s, Code:%s",
                 $module, $action,
                 $e->getMessage(), $e->getCode()

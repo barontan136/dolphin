@@ -9,18 +9,18 @@ class Response {
 	* @param array $data 数据
 	* return string
 	*/
-	public static function api_response($code, $message='', $data=array()){
+	public static function api_response($cmd, $code, $message='', $data=array()){
 		$type = 'json';
 
 		switch ($type) {
 			case 'json':
-				return self::response_json($code, $message, $data);
+				return self::response_json($cmd, $code, $message, $data);
 			case 'xml':
-				return self::response_xml($code, $message, $data);
+				return self::response_xml($cmd, $code, $message, $data);
 			case 'array':
-				return var_export(self::grant_array($code, $message, $data));
+				return var_export(self::grant_array($cmd, $code, $message, $data));
 			default:
-				return self::response_json($code, $message, $data);
+				return self::response_json($cmd, $code, $message, $data);
 		}
 	}
 
@@ -31,8 +31,8 @@ class Response {
 	* @param array $data 数据
 	* return string
 	*/
-	public static function response_json($code, $message='', $data=array()){
-		$result = self::grant_array($code, $message, $data);
+	public static function response_json($cmd, $code, $message='', $data=array()){
+		$result = self::grant_array($cmd, $code, $message, $data);
 		//echo self::decodeUnicode(json_encode($result));
 		return json_encode($result, JSON_UNESCAPED_UNICODE);
 	}
@@ -44,9 +44,9 @@ class Response {
 	* @param array $data 数据
 	* return string
 	*/
-	public static function response_xml($code, $message='', $data=array()){
+	public static function response_xml($cmd, $code, $message='', $data=array()){
 
-		$result = self::grant_array($code, $message, $data);
+		$result = self::grant_array($cmd, $code, $message, $data);
 
 		header("Content-Type:text/xml");
 		$xml = "<?xml version='1.0' encoding='UTF-8'?>\n";
@@ -85,13 +85,14 @@ class Response {
 	* @param array $data 数据
 	* return array
 	*/
-	private static function grant_array($code, $message='', $data=array()){
+	private static function grant_array($cmd, $code, $message='', $data=array()){
 //		if(!is_numeric($code)) {
 //			return '';
 //		}
 		$result = array(
-			'return_code' => $code,
-			'return_message' => $message
+		    'cmd' => $cmd,
+			'errno' => $code,
+			'msg' => $message
 			);
 
 		if(!empty($data)) {

@@ -47,26 +47,26 @@ class Task extends Worker
                 } else {
                     $jStr = '';
                 }
-                $sAction = isset($jArr['f']) ? $jArr['f'] : 'notexists';
+                $sAction = isset($jArr['c']) ? $jArr['c'] : 'notexists';
                 $this->logger->info(sprintf('[%s][input][%s]', $sAction, $data));
-                if (method_exists($this->handler, $jArr['f'])) {
+                if (method_exists($this->handler, $jArr['c'])) {
                     $oInput = new WorkerInput($jArr['r'], $jArr['c']);
 
                     $jRetStr = call_user_func_array(
-                        array($this->handler, $jArr['f']), array($oInput)
+                        array($this->handler, $jArr['c']), array($oInput)
                     );
                 } else {
                     $jRetStr = json_encode(array(
-                        'return_code' => '10001',
-                        'return_message' => '方法不存在！'
+                        'errno' => '10001',
+                        'msg' => '方法不存在！'
                     ));
                 }
                 $this->logger->info(sprintf('[%s][output][%s]', $sAction, $jRetStr));
                 $connection->send($jRetStr);
             } catch (Exception $ex) {
                 $jRetStr = json_encode(array(
-                    'return_code' => '10001',
-                    'return_message' => sprintf(
+                    'errno' => '10001',
+                    'msg' => sprintf(
                         'Exception:%s, Code:%s',
                         $ex->getMessage(),
                         $ex->getCode()

@@ -27,6 +27,9 @@
 require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 
 use \GatewayWorker\Lib\Gateway;
+use Utils\Logging;
+use Utils\WorkerInput;
+use Handlers\WebsocketHandler;
 
 class Events
 {
@@ -39,13 +42,60 @@ class Events
     {
         // debug
         echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onConnect:''\n";
+    }
 
-        // 从房间的客户端列表中删除
-        if(isset($_SESSION['room_id']))
-        {
-            $room_id = $_SESSION['room_id'];
-            $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>date('Y-m-d H:i:s'));
-            Gateway::sendToGroup($room_id, json_encode($new_message));
+
+    public static function onMessage($client_id, $message)
+    {
+        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id session:".json_encode($_SESSION)." onMessage:".$message."\n";
+
+        $message_data = json_decode($message, true);
+        $logger = Logging::getLogger();
+        $logger->info(sprintf('[input][onMessage] [%s]', Logging::json_pretty($message_data)));
+
+        $module = trim($message_data['m']);     //模块名称
+        $cmd = trim($message_data['c']);        //方法名称
+        $params = $message_data['r'];           //请求参数,DES_CBC加密
+//        $token = $message_data['t'];            //上次服务端返回给客户端的token
+//        $ver = $message_data['v'];              //客户端版本号
+//        $pla = intval($message_data['p']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
+
+        var_dump($message_data);
+        if (!isset($module) && !isset($cmd) && !isset($params)) {
+            $aResult = array(
+                "errno" => "10003",
+                "msg" => "参数不完整"
+            );
+            return;
+        }
+
+        // 需要发送到房间的接口列表
+        $cmds_send_to_group = array(
+            '0' => 'login',
+            '1' => 'sendMsg',
+            '2' => 'sendGift'
+        );
+
+        // 调用相应的socket方法
+        $hanlder = new WebsocketHandler();
+        if (method_exists($hanlder, $cmd)) {
+
+            $oInput = new WorkerInput($params, $cmd);
+            $jRetStr = call_user_func_array(
+                array($hanlder, $cmd), array($oInput)
+            );
+
+            Gateway::sendToCurrentClient($jRetStr);
+            if (in_array($cmd, $cmds_send_to_group)
+                && ($room_id = $oInput->get('rid', 0)) > 0){
+                    Gateway::sendToGroup($room_id, $jRetStr);
+            }
+        } else {
+            $jRetStr = json_encode(array(
+                'errno' => '10001',
+                'msg' => '方法不存在！'
+            ));
+            return;
         }
     }
    
@@ -54,7 +104,8 @@ class Events
     * @param int $client_id
     * @param mixed $message
     */
-   public static function onMessage($client_id, $message)
+   /*
+   public static function onMessage_bak($client_id, $message)
    {
         // debug
         echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id session:".json_encode($_SESSION)." onMessage:".$message."\n";
@@ -144,7 +195,7 @@ class Events
                 return Gateway::sendToGroup($room_id ,json_encode($new_message));
         }
    }
-   
+   */
    /**
     * 当客户端断开连接时
     * @param integer $client_id 客户端id

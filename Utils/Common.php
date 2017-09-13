@@ -319,4 +319,8 @@ class Common
         return ($second1 - $second2) / 86400;
     }
 
+    public static function getAction($method) {
+        return 'On' . strtoupper(substr($method, 0, 1)) . substr($method, 1);
+    }
+
 }
