@@ -65,7 +65,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     };
 
     $module = trim($jArr['m']);     //模块名称
-    $action = trim($jArr['c']);     //方法名称
+    $action = trim($jArr['f']);     //方法名称
     $params = $jArr['r'];           //请求参数,DES_CBC加密
     $token = $jArr['t'];            //上次服务端返回给客户端的token
     $ver = $jArr['v'];              //客户端版本号
@@ -74,13 +74,13 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     //获取客户端ip
     $IP = isset($data['server']['HTTP_REMOTEIP']) ? $data['server']['HTTP_REMOTEIP'] : $data['server']['REMOTE_ADDR'];
 
-    if (!isset($jArr['m']) && !isset($jArr['c'])
+    if (!isset($jArr['m']) && !isset($jArr['f'])
         && !isset($jArr['r']) && !isset($jArr['t'])
         && !isset($jArr['v']) && !isset($jArr['p'])
     ) {
         $aResult = array(
-            "errno" => "10003",
-            "msg" => "参数不完整—dolphin",
+            "return_code" => "10003",
+            "return_message" => "参数不完整",
             'token' => Token::getToken(),
         );
         $newArr = array('a'=>$action, 'r'=>$params, 'c'=>[
@@ -98,7 +98,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         'ip'       => $IP,
         'token'    => $token, //上次服务端返回给客户端的token
         'module'   => $module, //模块名称
-        'version'  => $ver, //客户端版本号 1.0.0
+        'version'  => $ver, //客户端版本号
         'platform' => $pla, //客户端平台类型,0-WEB, 1-WAP, 2-AOS, 3-IOS, 99-ADMIN
     ]);
 
@@ -142,8 +142,8 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     } catch (\Exception $e) {
         $logger->info(sprintf("[Exception][%s][%s][%s][%s]", $module, $action, $isEncrypt, $params));
         $aResult = array(
-            "errno" => "10001",
-            "msg" => sprintf(
+            "return_code" => "10001",
+            "return_message" => sprintf(
                 "module:%s, action:%s, Exception:%s, Code:%s",
                 $module, $action,
                 $e->getMessage(), $e->getCode()
