@@ -32,6 +32,7 @@ class WebsocketHandler
     {
         $user_id  = $oInput->get('uid', '1'); // 用户ID
         $room_id  = $oInput->get('rid', '1'); // 房间ID
+        $client_id  = $oInput->get('client_id', '1'); // socket connect id
 
         $errcode = '0';
         $response = [];
@@ -39,6 +40,7 @@ class WebsocketHandler
             $user_info = $this->user->getUserInfo($user_id);
             $response = $user_info;
 
+            Gateway::joinGroup($client_id, $room_id);
             $_SESSION['room_id'] = $room_id;
             $_SESSION['client_name'] = $user_info['user_name'];
 

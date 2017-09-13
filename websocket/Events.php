@@ -81,6 +81,7 @@ class Events
         if (method_exists($hanlder, $cmd)) {
 
             $oInput = new WorkerInput($params, $cmd);
+            $oInput->set('client_id', $client_id);
             $jRetStr = call_user_func_array(
                 array($hanlder, $cmd), array($oInput)
             );
