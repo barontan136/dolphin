@@ -94,6 +94,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     }
 
     $rawArr = [];
+    $rawArr = json_decode($params, true);
     $newArr = array('a'=>$action, 'r'=>$rawArr, 'c'=>[
         'ip'       => $IP,
         'token'    => $token, //上次服务端返回给客户端的token
