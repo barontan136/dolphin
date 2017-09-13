@@ -65,7 +65,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     };
 
     $module = trim($jArr['m']);     //模块名称
-    $action = trim($jArr['f']);     //方法名称
+    $action = trim($jArr['c']);     //方法名称
     $params = $jArr['r'];           //请求参数,DES_CBC加密
     $token = $jArr['t'];            //上次服务端返回给客户端的token
     $ver = $jArr['v'];              //客户端版本号
@@ -74,7 +74,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     //获取客户端ip
     $IP = isset($data['server']['HTTP_REMOTEIP']) ? $data['server']['HTTP_REMOTEIP'] : $data['server']['REMOTE_ADDR'];
 
-    if (!isset($jArr['m']) && !isset($jArr['f'])
+    if (!isset($jArr['m']) && !isset($jArr['c'])
         && !isset($jArr['r']) && !isset($jArr['t'])
         && !isset($jArr['v']) && !isset($jArr['p'])
     ) {
