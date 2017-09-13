@@ -45,7 +45,6 @@ class WebsocketHandler
             $_SESSION['client_name'] = $user_info['user_name'];
 
         } while(false);
-        var_dump($response);
 
         return Response::api_response(
             Common::getAction(__FUNCTION__),

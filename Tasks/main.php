@@ -80,7 +80,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     ) {
         $aResult = array(
             "errno" => "10003",
-            "msg" => "参数不完整",
+            "msg" => "参数不完整—dolphin",
             'token' => Token::getToken(),
         );
         $newArr = array('a'=>$action, 'r'=>$params, 'c'=>[

@@ -69,7 +69,7 @@ class Events
             return;
         }
 
-        // 需要发送到房间的接口列表
+        // 需要广播发送到房间的接口列表
         $cmds_send_to_group = array(
             '0' => 'Login',
             '1' => 'SendMsg',
@@ -79,7 +79,6 @@ class Events
         // 调用相应的socket方法
         $hanlder = new WebsocketHandler();
         if (method_exists($hanlder, $cmd)) {
-
             $oInput = new WorkerInput($params, $cmd);
             $oInput->set('client_id', $client_id);
             $jRetStr = call_user_func_array(
@@ -87,10 +86,8 @@ class Events
             );
 
             Gateway::sendToCurrentClient($jRetStr);
-            if (in_array($cmd, $cmds_send_to_group)
-                && ($room_id = $oInput->get('rid', 0)) > 0){
-                    var_dump('send to group');
-                    Gateway::sendToGroup($room_id, $jRetStr);
+            if (in_array($cmd, $cmds_send_to_group) && ($room_id = $oInput->get('rid', 0)) > 0){
+                Gateway::sendToGroup($room_id, $jRetStr);
             }
         } else {
             $jRetStr = json_encode(array(
