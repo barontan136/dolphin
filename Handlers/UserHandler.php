@@ -26,9 +26,9 @@ class UserHandler
      */
     public function getUserInfo($oInput)
     {
-        $user_id  = $oInput->get('user_id', '1'); //设备惟一标识
+        $user_id  = $oInput->get('uid', '1'); //设备惟一标识
 
-        $errcode = '000000';
+        $errcode = '0';
         $response = [];
         do {
             $user_info = $this->user->getUserInfo($user_id);

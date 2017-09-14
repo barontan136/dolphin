@@ -64,19 +64,23 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
 
     };
 
-    $module = trim($jArr['m']);     //模块名称
-    $action = trim($jArr['c']);     //方法名称
-    $params = $jArr['r'];           //请求参数,DES_CBC加密
-    $token = $jArr['t'];            //上次服务端返回给客户端的token
-    $ver = $jArr['v'];              //客户端版本号
-    $pla = intval($jArr['p']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
+    $module = trim($jArr['module']);     //模块名称
+    $action = trim($jArr['method']);     //方法名称
+    $params = $jArr['ras'];           //请求参数,DES_CBC加密
+    $token = $jArr['token'];            //上次服务端返回给客户端的token
+    $ver = $jArr['version'];              //客户端版本号
+    $pla = intval($jArr['platform']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
+    $packageId = intval($jArr['packageId']);      //分包号（多个APP）
+    $channel = intval($jArr['channel']);      //渠道名称
+    $deviceName = intval($jArr['deviceName']);      //设备号
+    $androidVersion = intval($jArr['androidVersion']);      //android 版本号
 
     //获取客户端ip
     $IP = isset($data['server']['HTTP_REMOTEIP']) ? $data['server']['HTTP_REMOTEIP'] : $data['server']['REMOTE_ADDR'];
 
-    if (!isset($jArr['m']) && !isset($jArr['c'])
-        && !isset($jArr['r']) && !isset($jArr['t'])
-        && !isset($jArr['v']) && !isset($jArr['p'])
+    if (!isset($jArr['module']) && !isset($jArr['method'])
+        && !isset($jArr['ras']) && !isset($jArr['token'])
+        && !isset($jArr['version']) && !isset($jArr['platform'])
     ) {
         $aResult = array(
             "return_code" => "10003",
