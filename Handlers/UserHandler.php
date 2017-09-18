@@ -31,8 +31,7 @@ class UserHandler
         $errcode = '0';
         $response = [];
         do {
-            $user_info = $this->user->getUserInfo($user_id);
-            $response = $user_info;
+            $response = $this->user->getUserInfo($user_id);
         } while(false);
         var_dump($response);
 
