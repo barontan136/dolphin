@@ -2,17 +2,17 @@
 /**
  * 用户表
  */
-namespace Tables\User;
+namespace Tables\Payment;
 
-use Tables\UserBase;
+use Tables\PaymentBase;
 
-class UserTable extends UserBase
+class RechargeOrderTable extends PaymentBase
 {
     public function __construct()
     {
         $this->setPrefix("lz_");
-        $this->setTable('users');
-        $this->setPk('uid');
+        $this->setTable('recharge_log');
+        $this->setPk('recharegeSn');
         $this->setTableInId(99);
         parent::__construct();
     }
@@ -31,17 +31,5 @@ class UserTable extends UserBase
         }
     }
 
-    /**
-     * 根据用户uid返回用户相关信息
-     * @param string $user_id
-     * @param string | array $field
-     * @return mixed
-     */
-    public function getUserInfoByUserId($user_id, $field='*')
-    {
-        return $this->medoo->get($this->table(),
-            $field,
-            array('user_id' => $user_id));
-    }
 
 }

@@ -2,18 +2,18 @@
 /**
  * 用户表
  */
-namespace Tables\User;
+namespace Tables\Payment;
 
-use Tables\UserBase;
+use Tables\PaymentBase;
 
-class UserTable extends UserBase
+class WithdrawOrderTable extends PaymentBase
 {
     public function __construct()
     {
         $this->setPrefix("lz_");
-        $this->setTable('users');
-        $this->setPk('uid');
-        $this->setTableInId(99);
+        $this->setTable('withdraw_log');
+        $this->setPk('withdrawSn');
+        $this->setTableInId(98);
         parent::__construct();
     }
 
@@ -31,17 +31,5 @@ class UserTable extends UserBase
         }
     }
 
-    /**
-     * 根据用户uid返回用户相关信息
-     * @param string $user_id
-     * @param string | array $field
-     * @return mixed
-     */
-    public function getUserInfoByUserId($user_id, $field='*')
-    {
-        return $this->medoo->get($this->table(),
-            $field,
-            array('user_id' => $user_id));
-    }
 
 }

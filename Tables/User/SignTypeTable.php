@@ -6,14 +6,14 @@ namespace Tables\User;
 
 use Tables\UserBase;
 
-class UserTable extends UserBase
+class SignTypeTable extends UserBase
 {
     public function __construct()
     {
         $this->setPrefix("lz_");
-        $this->setTable('users');
-        $this->setPk('uid');
-        $this->setTableInId(99);
+        $this->setTable('sign_type');
+        $this->setPk('signID');
+        $this->setTableInId(96);
         parent::__construct();
     }
 
@@ -29,19 +29,6 @@ class UserTable extends UserBase
         }else{
             return $this->medoo->select($this->table(),$field,$where);
         }
-    }
-
-    /**
-     * 根据用户uid返回用户相关信息
-     * @param string $user_id
-     * @param string | array $field
-     * @return mixed
-     */
-    public function getUserInfoByUserId($user_id, $field='*')
-    {
-        return $this->medoo->get($this->table(),
-            $field,
-            array('user_id' => $user_id));
     }
 
 }

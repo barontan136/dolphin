@@ -2,18 +2,18 @@
 /**
  * 用户表
  */
-namespace Tables\User;
+namespace Tables\Record;
 
-use Tables\UserBase;
+use Tables\RecordBase;
 
-class UserTable extends UserBase
+class ModerLogTable extends RecordBase
 {
     public function __construct()
     {
         $this->setPrefix("lz_");
-        $this->setTable('users');
-        $this->setPk('uid');
-        $this->setTableInId(99);
+        $this->setTable('moder_log');
+        $this->setPk('logID');
+        $this->setTableInId(98);
         parent::__construct();
     }
 
@@ -29,19 +29,6 @@ class UserTable extends UserBase
         }else{
             return $this->medoo->select($this->table(),$field,$where);
         }
-    }
-
-    /**
-     * 根据用户uid返回用户相关信息
-     * @param string $user_id
-     * @param string | array $field
-     * @return mixed
-     */
-    public function getUserInfoByUserId($user_id, $field='*')
-    {
-        return $this->medoo->get($this->table(),
-            $field,
-            array('user_id' => $user_id));
     }
 
 }
