@@ -30,6 +30,8 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     //开始时间
     list($startmicro, $startsecond) = explode(' ', microtime());
 
+    $logger->info(sprintf('[input][orginal] [%s]', $des));
+
     $jArr = $data['post'];
     $logger->info(sprintf('[input][raw] [%s]', Logging::json_pretty($jArr)));
     $aResult = [];
