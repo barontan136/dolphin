@@ -41,7 +41,7 @@ class UserTable extends UserBase
     {
         return $this->medoo->get($this->table(),
             $field,
-            array('user_id' => $user_id));
+            array('uid' => $user_id));
     }
 
 }
