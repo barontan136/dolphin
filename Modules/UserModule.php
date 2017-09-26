@@ -14,7 +14,7 @@ class UserModule
     public function __construct()
     {
         $this->userTable = new UserTable();
-//        $this->userCacheTable = new  UserRedisTable();
+//      $this->userCacheTable = new UserRedisTable();
         $this->log = Logging::getLogger();
     }
 
