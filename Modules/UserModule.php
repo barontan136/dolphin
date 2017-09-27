@@ -24,6 +24,18 @@ class UserModule
      * @param string | array $fields
      * @return mixed
      */
+    public function getUserInfoByMobile($mobile)
+    {
+        return $this->userTable->getUserInfoByMoible($mobile);
+    }
+
+
+    /**
+     * 获取用户注册信息
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
     public function getUserInfo($user_id, $fields = '*')
     {
         $user_info = $this->userTable->getUserInfoByUserId($user_id, $fields);

@@ -17,6 +17,25 @@ class SmsCodeTable extends UserBase
         parent::__construct();
     }
 
+
+    /**
+     * @param $where
+     * @param $join
+     * @param string $field
+     * @return mixed
+     */
+    public function insertSendLog($data)
+    {
+        $now_time = date('Y-m-d H:i:s');
+        $sms_log_id = IdGenerator::genId($this->getModuleInId(), $this->getTableInId());
+        $data["codeID"] = $sms_log_id;
+        $data["createDatetime"] = $now_time;
+        $data["updateDatetime"] = $now_time;
+
+        $this->medoo->insert($this->table(), $data);
+        return $sms_log_id;
+    }
+
     /**
      * @param $where
      * @param $join

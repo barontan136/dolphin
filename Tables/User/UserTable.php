@@ -44,4 +44,17 @@ class UserTable extends UserBase
             array('uid' => $user_id));
     }
 
+    /**
+     * 根据用户手机号返回用户相关信息
+     * @param string $mobile
+     * @param string | array $field
+     * @return mixed
+     */
+    public function getUserInfoByMoible($mobile, $field='*')
+    {
+        return $this->medoo->get($this->table(),
+            $field,
+            array('regMobile' => $mobile));
+    }
+
 }
