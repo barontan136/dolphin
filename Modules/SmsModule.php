@@ -150,6 +150,7 @@ class SmsModule
             'smsBody' => $content,
             'uid' => $user_id,
             'platform' => $platform,
+            'code' => $msg['code'],
             'status' => 0,
         );
         $SendID = $res['request_id'];
