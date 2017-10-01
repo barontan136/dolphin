@@ -32,7 +32,8 @@ class ConfigModule
     {
         $result = $this->confTable->getValByKeyName($key);
         $result = $result !== '' ? $result : $default;
-        return env($key, $result);
+        return $result;
+//        return env($key, $result);
     }
 
     /**
