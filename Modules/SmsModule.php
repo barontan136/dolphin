@@ -71,8 +71,7 @@ class SmsModule
             return FALSE;
         }
 
-        if ($check_code != $vcode['vcode']
-        &&  $check_code != '0000') {
+        if ($check_code != $vcode['vcode']) {
             $this->err_code = '6006';
             return FALSE;
         }

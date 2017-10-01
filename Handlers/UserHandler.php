@@ -99,7 +99,7 @@ class UserHandler
         if (isset($user_info['uid']) && $user_info['uid'] == $user_id){
             // 表示登录或者绑定，刷新access_token，并返回
             $response['access_token'] = 'thisisaccesstokenfor'.$mobile;
-            
+
         }
         elseif (empty($user_info)){
             // 新增用户,手机号为mobile,密码随机
