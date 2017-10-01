@@ -105,11 +105,11 @@ class UserHandler
             //每次登录都重新生成access_token
             $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
             $response['access_token'] = $access_token;
-
         }
         elseif (empty($user_info)){
             // 新增用户,手机号为mobile,密码随机
             try{
+                // 手机号注册逻辑
                 $user_data = $this->userModule->registerByMobile(
                     $mobile,
                     0,

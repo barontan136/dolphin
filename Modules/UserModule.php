@@ -64,6 +64,7 @@ class UserModule
     )
     {
         do{
+            $configModule = new ConfigModule();
             $now = date('Y-m-d H:i:s');
             $user_id = $this->userTable->genId();
             //登录密码根据加密规则加密，存储数据库的是加密后的密文
@@ -73,11 +74,15 @@ class UserModule
                 'nickname'     => $regMobile,
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
-                'password'      => '',
-                'salt'          => '0000',
+                'password'     => '',
+                'salt'         => '0000',
                 'deviceNum'    => $deviceNum,
-                'source'        => $source,
-                'type'       => 1,
+                'source'       => $source,
+                'type'         => 1,
+                'headPic'      => $configModule->getValByKeyName('user_head_pic_default', ""),
+                'bgImg'        => $configModule->getValByKeyName('user_bg_pic_default', ""),
+                'createDatetime' => $now,
+                'updateDatetime' => $now
             );
 
             $this->userRegister($user_data);
