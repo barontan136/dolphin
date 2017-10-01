@@ -36,6 +36,11 @@ class SmsCodeTable extends UserBase
         return $sms_log_id;
     }
 
+    public function updateByWhere($data, $where){
+        
+        return $this->medoo->update($this->table(), $data, $where);
+    }
+
     /**
      * @param $where
      * @param $join
