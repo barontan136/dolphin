@@ -174,7 +174,8 @@ class SmsModule
                     [
                         'vcode'      => $this->check_code,
                         'codeID' => $sms_log_id
-                    ]
+                    ],
+                    300     // ttl
                 );
                 return true;
             } catch (\Exception  $e) {
