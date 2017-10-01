@@ -28,7 +28,6 @@ class VCodeRedisTable
      */
     public function setVerifyCode($reg_mobile, $code_data, $ttl=120)
     {
-        return true;
         /**
          * $code_data结构
          * vcode => 验证码
@@ -51,7 +50,6 @@ class VCodeRedisTable
      */
     public function getVerifyCode($reg_mobile)
     {
-        return '0000';
         try {
             $key = sprintf($this->vCode, $reg_mobile);
             return $this->cache->hGetAll($key);
