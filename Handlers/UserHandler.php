@@ -94,10 +94,10 @@ class UserHandler
         $response = [];
         $errcode = '0';
         //校验验证码
-        if (0 || !$this->smsModule->checkSmsCode($mobile, $check_code)) {
-            $err_code = $this->smsModule->getErrCode();
-            return Response::api_response($err_code, ErrMessage::$message[$err_code]);
-        }
+//        if (!$this->smsModule->checkSmsCode($mobile, $check_code)) {
+//            $err_code = $this->smsModule->getErrCode();
+//            return Response::api_response($err_code, ErrMessage::$message[$err_code]);
+//        }
         // 以下验证通过
         $user_info = $this->userModule->getUserInfoByMobile($mobile);
         if (isset($user_info['uid']) && $user_info['uid'] == $user_id){
