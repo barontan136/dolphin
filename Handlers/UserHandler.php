@@ -130,7 +130,7 @@ class UserHandler
         $response['user_id'] = $user_id;
 
 
-        return Response::api_response('000000', ErrMessage::$message['000000']);
+        return Response::api_response($errcode, ErrMessage::$message[$errcode]);
     }
 
 }

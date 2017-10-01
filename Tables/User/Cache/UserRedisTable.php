@@ -12,9 +12,9 @@ use Utils\RedisClient;
 class UserRedisTable
 {
     private $cache = null;
-    private $userStatic = "us:%s"; //用户静态信息，不经常改动，数据结构：HASH
-    private $userDynamic = "ud:%s"; //用户动态信息，经常变动，数据结构：HASH
-    private $name2id = "un:%s"; //用户名(手机号)到用户id的映射，数据结构：键值对
+    private $userStatic = "lzus:%s"; //用户静态信息，不经常改动，数据结构：HASH
+    private $userDynamic = "lzud:%s"; //用户动态信息，经常变动，数据结构：HASH
+    private $name2id = "lzun:%s"; //用户名(手机号)到用户id的映射，数据结构：键值对
 
     public function __construct()
     {
