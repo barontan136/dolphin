@@ -23,7 +23,7 @@ class SmsModule
     private $UserModule = '';
     private $log = null;
     private $vCode = null;
-    private $configModule = null;
+//    private $configModule = null;
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class SmsModule
         $this->UserModule = new UserModule();
         $this->log = Logging::getLogger();
         $this->vCode = new  VCodeRedisTable();
-        $this->configModule = new ConfigModule();
+//        $this->configModule = new ConfigModule();
         $this->platforms = [2]; //0:广州首易 1:上海创蓝 2:阿里大鱼
 
         $this->message = array(

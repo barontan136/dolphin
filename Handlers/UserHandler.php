@@ -59,7 +59,7 @@ class UserHandler
         //发送短信信息
         try {//发送验证码
             $data = array(
-                'tpl_id' => 'SMS_XXXX',
+                'tpl_id' => 'SMS_10410948',
                 'code' => $this->smsModule->createSmsContent()
             );
             $this->log->info(sprintf("sendMessage->reg_mobile:%s, user_id:%s, code:%s", $mobile, $user_id, $data['code']));
