@@ -66,6 +66,7 @@ class SmsModule
     public function checkSmsCode($reg_mobile, $check_code)
     {
         $vcode = $this->vCode->getVerifyCode($reg_mobile);
+        var_dump($check_code, $vcode);
         if (!$vcode) {
             $this->err_code = '6002';
             return FALSE;
