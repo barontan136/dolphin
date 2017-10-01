@@ -94,7 +94,7 @@ class UserHandler
         $response = [];
         $errcode = '0';
         //校验验证码
-        if (!$this->smsModule->checkSmsCode($mobile, $check_code)) {
+        if (1 || !$this->smsModule->checkSmsCode($mobile, $check_code)) {
             $err_code = $this->smsModule->getErrCode();
             return Response::api_response($err_code, ErrMessage::$message[$err_code]);
         }
