@@ -83,10 +83,12 @@ class UserHandler
      */
     public function mobileBind($oInput)
     {
-        $user_id = $oInput->get('uid', '0');       // 用户ID
+        $user_id = $oInput->get('uid', '');       // 用户ID
         $mobile = $oInput->get('mobile', '');    // 接收短信的手机号
         $check_code = $oInput->get('vcode ','');
 
+        $response = [];
+        $errcode = '0';
         //校验验证码
         if (!$this->smsModule->checkSmsCode($mobile, $check_code)) {
             $err_code = $this->smsModule->getErrCode();
@@ -96,6 +98,11 @@ class UserHandler
         $user_info = $this->userModule->getUserInfoByMobile($mobile);
         if (isset($user_info['uid']) && $user_info['uid'] == $user_id){
             // 表示登录或者绑定，刷新access_token，并返回
+            $response['access_token'] = 'thisisaccesstokenfor'.$mobile;
+            
+        }
+        elseif (empty($user_info)){
+            // 新增用户,手机号为mobile,密码随机
 
         }
 
