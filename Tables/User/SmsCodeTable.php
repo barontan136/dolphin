@@ -27,7 +27,7 @@ class SmsCodeTable extends UserBase
     public function insertSendLog($data)
     {
         $now_time = date('Y-m-d H:i:s');
-        $sms_log_id = IdGenerator::genId($this->getModuleInId(), $this->getTableInId());
+        $sms_log_id = $this->genId();//IdGenerator::genId($this->getModuleInId(), $this->getTableInId());
         $data["codeID"] = $sms_log_id;
         $data["createDatetime"] = $now_time;
         $data["updateDatetime"] = $now_time;
