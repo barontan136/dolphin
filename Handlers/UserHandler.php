@@ -85,7 +85,7 @@ class UserHandler
     {
         $user_id = $oInput->get('uid', '');       // 用户ID
         $mobile = $oInput->get('mobile', '');    // 接收短信的手机号
-        $check_code = $oInput->get('vcode ','');
+        $check_code = $oInput->get('vcode','');
 
         $response = [];
         $errcode = '0';
