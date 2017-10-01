@@ -31,6 +31,72 @@ class UserModule
 
 
     /**
+     * 用户注册
+     * @param array $user_data
+     * @return mixed
+     */
+    public function userRegister($user_data)
+    {
+        return $this->userTable->createUser($user_data);
+    }
+    /**
+     * 保存用户静态信息至Redis
+     * @param string $user_id
+     * @param array $user_data
+     * @return bool
+     */
+    public function saveUserStaticToRedis($user_id, $user_data)
+    {
+        return $this->userCacheTable->setUserStaticCacheByUserId($user_id, $user_data);
+    }
+
+
+    /**
+     * 获取用户注册信息
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
+    public function registerByMobile(
+        $regMobile,
+        $source,
+        $deviceNum
+    )
+    {
+        do{
+            $now = date('Y-m-d H:i:s');
+            $user_id = $this->userTable->genId();
+            //登录密码根据加密规则加密，存储数据库的是加密后的密文
+//            $pwd_md5 = md5(md5($password) . $salt);
+            $user_data = array(
+                'uid'       => $user_id,
+                'nickname'     => $regMobile,
+                'regMobile'    => $regMobile,
+                'regTime'      => $now,
+                'password'      => '',
+                'salt'          => '0000',
+                'deviceNum'    => $deviceNum,
+                'source'        => $source,
+                'type'       => 1,
+            );
+
+            $this->userRegister($user_data);
+
+            $this->saveUserStaticToRedis($user_id, array(
+                'name'       => $regMobile,
+                'regMobile' => $regMobile,
+                'deviceNum'  => $deviceNum,
+                'type'     => 1,
+                'status'     => 1,
+            ));
+
+        }while(0);
+
+        return $user_data;
+    }
+
+
+    /**
      * 获取用户注册信息
      * @param string $user_id
      * @param string | array $fields

@@ -57,4 +57,19 @@ class UserTable extends UserBase
             array('regMobile' => $mobile));
     }
 
+    /**
+     * 用户注册
+     * @param array $user_data 字段名=>值
+     * @return mixed
+     */
+    public function createUser($user_data)
+    {
+        try {
+            $this->medoo->insert($this->table(), $user_data);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 }

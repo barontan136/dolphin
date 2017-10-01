@@ -3,6 +3,7 @@
 namespace Handlers;
 
 use Modules\SmsModule;
+use Modules\TokenModule;
 use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
@@ -14,10 +15,12 @@ class UserHandler
     private $user = NULL;
     private $log = null;
     private $smsModule = null;
+    private $token = null;
 
     public function __construct()
     {
         $this->userModule = new UserModule();
+        $this->token = TokenModule::getInstance();
         $this->log = Logging::getLogger();
         $this->smsModule = new SmsModule();
     }
@@ -84,6 +87,7 @@ class UserHandler
     public function mobileBind($oInput)
     {
         $user_id = $oInput->get('uid', '');       // 用户ID
+        $device_id = $oInput->get('device', '000000000');       // 设备ID
         $mobile = $oInput->get('mobile', '');    // 接收短信的手机号
         $check_code = $oInput->get('vcode','');
 
@@ -98,13 +102,33 @@ class UserHandler
         $user_info = $this->userModule->getUserInfoByMobile($mobile);
         if (isset($user_info['uid']) && $user_info['uid'] == $user_id){
             // 表示登录或者绑定，刷新access_token，并返回
-            $response['access_token'] = 'thisisaccesstokenfor'.$mobile;
+            //每次登录都重新生成access_token
+            $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
+            $response['access_token'] = $access_token;
 
         }
         elseif (empty($user_info)){
             // 新增用户,手机号为mobile,密码随机
+            try{
+                $user_data = $this->userModule->registerByMobile(
+                    $mobile,
+                    0,
+                    $device_id
+                );
+                $user_id = $user_data['uid'];
+            }catch(\Exception $e){
 
+            }
+
+            $access_token = $this->token->createAccessToken(
+                $user_id,
+                $device_id,
+                0
+            );
+            $response['access_token'] = $access_token;
         }
+        $response['user_id'] = $user_id;
+
 
         return Response::api_response('000000', ErrMessage::$message['000000']);
     }
