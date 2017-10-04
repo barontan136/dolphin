@@ -188,9 +188,9 @@ class UserModule
      * @param string | array $fields
      * @return mixed
      */
-    public function getUserInfo($user_id, $fields = '*')
+    public function getUserInfo($user_id)
     {
-        $user_info = $this->userTable->getUserInfoByUserId($user_id, $fields);
+        $user_info = $this->userTable->getUserInfoByUserId($user_id);
         $ret_data = array(
             'uid' => $user_info['uid'],
             'nickname' => $user_info['nickname'],

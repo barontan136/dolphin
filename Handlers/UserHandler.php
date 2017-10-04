@@ -96,7 +96,7 @@ class UserHandler
         $errcode = '0';
         do{
             try{
-                $user_type = $this->getUserInfo($user_id, 'type');
+                $user_type = $this->userModule->getUserInfo($user_id);
                 if (isset($user_type['type']) && $user_type['type'] == GlobalConfig::USER_MODER){
                     $errcode = '990002';
                     break;
