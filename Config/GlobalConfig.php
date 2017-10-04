@@ -13,4 +13,10 @@ class GlobalConfig
     const NOBUNDING = 0;
     const BUNDING = 1;
     const UNBUNDING = 2;
+
+    /* 用户类型 0未知 1普通用户 2 主播 3其他用户 */
+    const USR_UNKNOW = 0;
+    const USER_NORMAL = 1;
+    const USER_MODER = 2;
+    const USER_OTHER = 3;
 }

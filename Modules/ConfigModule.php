@@ -77,4 +77,29 @@ class ConfigModule
         return $this->getValByKeyName('httpimg_url', '');
     }
 
+    /**
+     * 获取主播播放地址
+     * 如: rtmp://push.szxiawa.com/xiawaNormal/XXXXXXX?auth_key=XXXXXXXXX
+     * @return string
+     */
+    public function getUserpublishDomain($roomID){
+
+        return sprintf(
+            $this->getValByKeyName('root_domain_play',"rtmp://push.szxiawa.com/%s/%s?auth_key="),
+            $this->getValByKeyName('stream_app_name','xiawaNormal'),
+            $roomID);
+    }
+    /**
+     * 获取主播发布/推送地址
+     * 如: rtmp://video-center.alivecdn.com/xiawaNormal/XXXXXXXX?vhost=push.szxiawa.com
+     * @return string
+     */
+    public function getUserPlayDomain($roomID){
+
+        return sprintf(
+            $this->getValByKeyName('root_domain_publish',"rtmp://video-center.alivecdn.com/%s/%s?vhost=push.szxiawa.com"),
+            $this->getValByKeyName('stream_app_name','xiawaNormal'),
+            $roomID);
+    }
+
 }

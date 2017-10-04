@@ -1,10 +1,14 @@
 <?php
 namespace Modules;
 
+use Tables\Room\RoomTable;
+use Tables\User\UserAuthTable;
 use Utils\Logging;
 use Tables\User\UserTable;
 use Tables\User\Cache\UserRedisTable;
 use Utils\Common;
+use Config\GlobalConfig;
+
 class UserModule
 {
     private $log = null;
@@ -102,6 +106,83 @@ class UserModule
 
 
     /**
+     * 获取用户注册信息
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
+    public function setUserToModerator($user_id, $auth_info)
+    {
+        $mid = 1234567;         // 主播编号
+
+        try{
+            $medoo = $this->userTable->getDb();
+            $medoo->action(function($database) use(
+                $user_id,
+                $auth_info,
+                $mid
+            ) {
+                $date_now = date('Y-m-d H:i:s');
+                $configModule = new ConfigModule();
+
+                // 添加主播认证信息表
+                $userAuthTable = new UserAuthTable();
+                $authID = $userAuthTable->genId();
+                $auth_data = array(
+                    'authID' => $authID,
+                    'uid' => $user_id,
+                    'info' => $auth_info,
+                    'createDatetime' => $date_now,
+                    'updateDatetime' => $date_now
+                );
+                $userAuthTable->insert($auth_data);
+
+                // 添加房间信息表
+                $roomTable = new RoomTable();
+                $roomID = $roomTable->genId();
+                $room_data = array(
+                    'rid' => $roomID,
+                    'uid' => $user_id,
+                    'videoPlayDomain' => $configModule->getUserPlayDomain($roomID),
+                    'videoPublishDomain' => $configModule->getUserpublishDomain($roomID),
+                    'videoPath' => '',
+                    'videoStreamName' => '',
+                    'videoPlayUrl' => $configModule->getUserPlayDomain($roomID),
+                    'danmuBg' => $configModule->getValByKeyName('danmu_bg_default', ''),
+                    'shareTitle' => $configModule->getValByKeyName('wx_share_title', ''),
+                    'shareContent' => $configModule->getValByKeyName('wx_share_content', ''),
+                    'sharePic' => $configModule->getValByKeyName('wx_share_ico', ''),
+                    'shareUrl' => $configModule->getValByKeyName('wx_share_url', ''),
+                    'createDatetime' => $date_now,
+                    'updateDatetime' => $date_now
+                );
+                $roomTable->insert($room_data);
+                $autoID = $roomTable->getAutoIDByRoomId($roomID);
+                var_dump($autoID);
+
+                // 更改用户类型为主播用户
+                $user_data = array(
+                    'type' => GlobalConfig::USER_MODER,
+                    'mid' => $autoID,
+                    'videoPlayUrl' => $configModule->getUserPlayDomain($roomID),
+                    'rid' => $roomID,
+                    'verifiedID' => $authID,
+                    'verifiedInfo' => $auth_info,
+                    'updateDatetime' => $date_now,
+                );
+                $this->userTable->updateByPk($user_data, $user_id);
+            });
+        }catch(\Exception $e){
+            $this->log->error(sprintf(
+                '%s rollBackTrans:%s',
+                __FUNCTION__,
+                $e->getMessage()
+            ), $e);
+        }
+
+        return true;
+    }
+        /**
      * 获取用户注册信息
      * @param string $user_id
      * @param string | array $fields
