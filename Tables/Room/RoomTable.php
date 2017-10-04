@@ -32,7 +32,7 @@ class RoomTable extends RoomBase
     }
 
     public  function  getAutoIDByRoomId($roomID){
-        return $this->medoo->get($this->table(), 'autoID', ['roomID' => $roomID]);
+        return $this->medoo->get($this->table(), 'autoID', ['rid' => $roomID]);
     }
 
 }
