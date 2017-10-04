@@ -135,6 +135,7 @@ class UserModule
                     'createDatetime' => $date_now,
                     'updateDatetime' => $date_now
                 );
+                var_dump('auth_data', $auth_data);
                 $userAuthTable->insert($auth_data);
 
                 // 添加房间信息表
@@ -178,6 +179,7 @@ class UserModule
                 __FUNCTION__,
                 $e->getMessage()
             ), $e);
+            return false;
         }
 
         return true;

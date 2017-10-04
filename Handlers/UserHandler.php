@@ -97,6 +97,7 @@ class UserHandler
         do{
             try{
                 $user_type = $this->userModule->getUserInfo($user_id);
+                var_dump($user_type['type']);
                 if (isset($user_type['type']) && $user_type['type'] == GlobalConfig::USER_MODER){
                     $errcode = '990002';
                     break;
@@ -107,9 +108,9 @@ class UserHandler
                 $auth_info = 'auth info';
 
                 // 更新该用户为实名认证用户,主播用户,并创建房间等信息
-                $this->userModule->setUserToModerator($user_id, $auth_info);
-
-                $response['isCertified'] = 1;
+                if ($this->userModule->setUserToModerator($user_id, $auth_info)){
+                    $response['isCertified'] = 1;
+                }
             }catch(\Exception $e){
                 $this->log->error($e);
                 $errcode = '990001';
