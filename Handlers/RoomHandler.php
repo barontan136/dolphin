@@ -38,7 +38,7 @@ class RoomHandler
                 break;
             }
             //
-            $ret = $this->userModule->updateUserAnnouncement($user_id);
+            $ret = $this->userModule->updateUserAnnouncement($user_id, $title);
             if ($ret <= 0){
                 $errcode = "980002";
                 break;
