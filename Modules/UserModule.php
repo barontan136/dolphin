@@ -65,7 +65,10 @@ class UserModule
         $data = array(
             'roomTitle' => $roomTitle,
         );
-        $where = ['uid' => $user_id];
+        $where = [
+            'AND' =>
+            ['uid' => $user_id, 'type' => GlobalConfig::USER_MODER]
+        ];
         return $this->userTable->updateUser($data, $where);
     }
 
