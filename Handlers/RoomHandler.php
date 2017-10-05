@@ -6,16 +6,19 @@ use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
 use Modules\UserModule;
+use Modules\RoomModule;
 
 
 class RoomHandler
 {
     private $userModule = NULL;
+    private $roomModule = NULL;
     private $log = null;
 
     public function __construct()
     {
         $this->userModule = new UserModule();
+        $this->roomModule = new RoomModule();
 //        $this->token = TokenModule::getInstance();
         $this->log = Logging::getLogger();
     }
@@ -58,18 +61,20 @@ class RoomHandler
     }
 
     /**
-     * 用户信息
+     * 主播信息列表
      * @param object $oInput
      * @return mixed|string
      */
-    public function getUserInfo($oInput)
+    public function getRooms($oInput)
     {
-        $user_id  = $oInput->get('uid', '1'); //设备惟一标识
+        $user_id  = $oInput->get('uid', '');     // 0：最新 1：热门 10：关注
+        $status  = $oInput->get('status', '0');     // 0：最新 1：热门 10：关注
+        $tagId  = $oInput->get('tagId', '');        // 0代表所有，其他代表相应tag
 
         $errcode = '0';
         $response = [];
         do {
-            $response = $this->userModule->getUserInfo($user_id);
+            $response = $this->userModule->getModerators($user_id, $status, $tagId);
         } while(false);
 
         return Response::api_response(

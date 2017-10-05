@@ -2,6 +2,7 @@
 namespace Modules;
 
 use Tables\Room\RoomTable;
+use Tables\User\ModerSignTable;
 use Tables\User\SignTypeTable;
 use Tables\User\UserAuthTable;
 use Utils\Logging;
@@ -220,7 +221,9 @@ class UserModule
 
         return true;
     }
-        /**
+
+
+    /**
      * 获取用户注册信息
      * @param string $user_id
      * @param string | array $fields
@@ -256,12 +259,87 @@ class UserModule
             'isPlaying' => $user_info['isPlaying'],
             'videoPlayUrl' => $user_info['videoPlayUrl'],
             'rid' => $user_info['rid'],
-            'verified' => $user_info['verified'],
-            'verifyInfo' => $user_info['verifyInfo'],
+            'verified' => isset($user_info['verified'])?$user_info['verified']:'',
+            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verified']:'',
             'flowerNumber' => $user_info['flowerNumber'],
         );
 
         return $ret_data;
+    }
+
+
+    /**
+     * 获取主播信息
+     * @param string $user_id 用户ID
+     * @param string $status 0：所有 1：最新 2：热门 10：关注
+     * @param string $tagID  标签ID
+     * @return mixed
+     */
+    public function getModerators($req_uid = 0, $status = 0, $tagID = 0){
+
+        $authTable = new UserAuthTable();
+        $userSignTable = new ModerSignTable();
+        $where_user = array(
+            'type' => GlobalConfig::USER_MODER
+        );
+        $where_user_auth = array(
+            'status' => 1
+        );
+        if ($req_uid != '' && $status == 10){// 0：所有 1：最新 2：热门 10：关注
+            // 该用户关注的主播信息
+            $user_info = $this->userTable->debug()->select(
+                [
+                    "[><]lz_user_attention(b)" => ['beAttentionUid' => 'uid','attentionUid' => $req_uid]
+                ],
+                ['a.*'],
+                [
+                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                    'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
+                ]
+            );
+            var_dump($user_info);
+        }
+        elseif ($status > 0){// 0：所有 1：最新 2：热门 10：关注
+            if ($status = 1){
+                $user_info = $this->userTable->debug()->select(
+                    [
+                        "[><]lz_user_auth(b)" => ['uid' => 'uid']
+                    ],
+                    ['a.*'],
+                    [
+                        'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                        'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
+                    ]);
+            }
+            else{// ($status = 2){
+                // TODO
+            }
+        }
+        elseif($tagID > 0){
+            $user_info = $this->userTable->debug()->select(
+                [
+                    "[><]lz_moder_sign(b)" => ['uid' => 'uid','signID' => $tagID]
+                ],
+                ['a.*'],
+                [
+                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                    'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
+                ]
+            );
+        }
+        else{
+            $user_info = $this->userTable->debug()->select('',
+                '*',
+                [
+                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                    'ORDER' => ['a.isPlaying' => 'DESC']
+                ]
+            );
+        }
+        var_dump($user_info);
+        //
+
+        return $user_info;
     }
 
 
