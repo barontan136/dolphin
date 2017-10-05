@@ -60,15 +60,16 @@ class UserHandler
         try{
             $sign_data = $this->userModule->getSignTypes();
 
+            var_dump($sign_data);
             $response['moderatorTags'] = $sign_data;
         }catch(\Exception $e){
-
-            return Response::api_response(
-                $errcode,
-                ErrMessage::$message[$errcode],
-                $response
-            );
         }
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
     }
 
 
