@@ -72,4 +72,20 @@ class UserTable extends UserBase
         }
     }
 
+    /**
+     * 更新用户
+     * @param array $data 字段名=>值
+     * @param array $where
+     * @return mixed
+     */
+    public function updateUser($user_data, $where)
+    {
+        try {
+            $this->medoo->update($this->table(), $user_data, $where);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 }

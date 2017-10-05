@@ -56,6 +56,20 @@ class UserModule
     }
 
     /**
+     * 更新主播开播标题
+     * @param string $user_id
+     * @param string $roomTitle
+     * @return mixed
+     */
+    public function updateUserAnnouncement($user_id, $roomTitle){
+        $data = array(
+            'roomTitle' => $roomTitle,
+        );
+        $where = ['uid' => $user_id];
+        return $this->userTable->updateUser($data, $where);
+    }
+
+    /**
      * 用户注册
      * @param array $user_data
      * @return mixed
