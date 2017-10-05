@@ -45,11 +45,12 @@ class UserModule
     public function getSignTypes()
     {
         $ret = $this->signType->select('', '', '*');
+        var_dump($ret);
         $result = [];
         //
         foreach($ret as $item){
             $key = $item['signID'];
-            $val = $item['name'];
+            $val = $item['signName'];
             $result[$key] = $val;
         }
         return $result;
