@@ -2,6 +2,7 @@
 namespace Modules;
 
 use Tables\Room\RoomTable;
+use Tables\User\SignTypeTable;
 use Tables\User\UserAuthTable;
 use Utils\Logging;
 use Tables\User\UserTable;
@@ -13,6 +14,7 @@ class UserModule
 {
     private $log = null;
     private $userTable = null;
+    private $signType = null;
     private $userCacheTable = null;
 
     public function __construct()
@@ -20,6 +22,7 @@ class UserModule
         $this->userTable = new UserTable();
         $this->userCacheTable = new UserRedisTable();
         $this->log = Logging::getLogger();
+        $this->signType = new SignTypeTable();
     }
 
     /**
@@ -33,6 +36,24 @@ class UserModule
         return $this->userTable->getUserInfoByMoible($mobile);
     }
 
+    /**
+     * 获取用户注册信息
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
+    public function getSignTypes()
+    {
+        $ret = $this->signType->select('', '', '*');
+        $result = [];
+        //
+        foreach($ret as $item){
+            $key = $item['signID'];
+            $val = $item['name'];
+            $result[$key] = $val;
+        }
+        return $result;
+    }
 
     /**
      * 用户注册
@@ -135,7 +156,6 @@ class UserModule
                     'createDatetime' => $date_now,
                     'updateDatetime' => $date_now
                 );
-                var_dump('auth_data', $auth_data);
                 $userAuthTable->insert($auth_data);
 
                 // 添加房间信息表
@@ -159,7 +179,6 @@ class UserModule
                 );
                 $roomTable->insert($room_data);
                 $autoID = $roomTable->getAutoIDByRoomId($roomID);
-                var_dump($autoID);
 
                 // 更改用户类型为主播用户
                 $user_data = array(

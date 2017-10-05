@@ -23,7 +23,7 @@ class SignTypeTable extends UserBase
      * @param string $field
      * @return mixed
      */
-    public function select($join='',$where,$field='*'){
+    public function select($join='', $where, $field='*'){
         if(!empty($join)){
             return $this->medoo->select($this->table().'(a)',$join,$field,$where);
         }else{

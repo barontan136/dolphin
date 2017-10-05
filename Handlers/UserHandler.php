@@ -50,6 +50,29 @@ class UserHandler
 
 
     /**
+     * 获取直播标签列表
+     * @return mixed
+     */
+    public function getConfig($oInput){
+
+        $errcode = '0';
+        $response = [];
+        try{
+            $sign_data = $this->userModule->getSignTypes();
+
+            $response['moderatorTags'] = $sign_data;
+        }catch(\Exception $e){
+
+            return Response::api_response(
+                $errcode,
+                ErrMessage::$message[$errcode],
+                $response
+            );
+        }
+    }
+
+
+    /**
      * 注册/登录/绑定时，请求获取验证码
      * @return mixed
      */
@@ -91,7 +114,6 @@ class UserHandler
         $user_id = $oInput->get('uid', '');         // 用户ID
         $check_code = $oInput->get('code','');      // 用于验证的验证码
 
-        $response = [];
         $response['isCertified'] = 0;
         $errcode = '0';
         do{

@@ -25,6 +25,15 @@ class RoomHandler
      * @param object $oInput
      * @return mixed|string
      */
+    public function getConfig($oInput){
+
+    }
+
+    /**
+     * 用户信息
+     * @param object $oInput
+     * @return mixed|string
+     */
     public function getUserInfo($oInput)
     {
         $user_id  = $oInput->get('uid', '1'); //设备惟一标识
