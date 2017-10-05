@@ -16,7 +16,7 @@ class RoomHandler
     public function __construct()
     {
         $this->userModule = new UserModule();
-        $this->token = TokenModule::getInstance();
+//        $this->token = TokenModule::getInstance();
         $this->log = Logging::getLogger();
     }
 
