@@ -27,7 +27,7 @@ class RoomAdminTable extends RoomBase
             'rid' => $roomID,
             'status' => 1
         );
-        return $this->getRoomAdmin('uid', $where);
+        return $this->getRoomAdmin('uid', ['AND' => $where]);
     }
 
     /**
