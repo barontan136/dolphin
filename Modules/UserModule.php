@@ -289,7 +289,7 @@ class UserModule
             // 该用户关注的主播信息
             $user_info = $this->userTable->select(
                 [
-                    "[><]lz_user_attention(b)" => ['a.uid' => 'b.beAttentionUid']
+                    "[><]lz_user_attention(b)" => ['a.uid' => 'beAttentionUid']
                 ],
                 [
                     'AND' => ['a.type' => GlobalConfig::USER_MODER, 'b.attentionUid' => $req_uid],
@@ -303,7 +303,7 @@ class UserModule
             if ($status = 1){
                 $user_info = $this->userTable->select(
                     [
-                        "[><]lz_user_auth(b)" => ['a.uid' => 'b.uid']
+                        "[><]lz_user_auth(b)" => ['a.uid' => 'uid']
                     ],
                     [
                         'AND' => ['a.type' => GlobalConfig::USER_MODER],
