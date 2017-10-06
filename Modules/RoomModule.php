@@ -24,6 +24,22 @@ class RoomModule
         $this->log = Logging::getLogger();
     }
 
+
+
+    /**
+     * 获取直播推流地址
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
+    public function getLiveAddress($rid){
+
+        $roomTable = new RoomTable();
+        $roomInfo = $roomTable->getRoomInfo(['rid' => $rid]);
+
+        return isset($roomInfo['videoPublishDomain']) ? $roomInfo['videoPublishDomain'] : '';
+    }
+
     /**
      * 获取主播房间详细信息
      * @param string $user_id
@@ -59,14 +75,14 @@ class RoomModule
             'nextLevelNeed'     => $userInfo['moderatorNextLevelNeedCoin'],
             'levelEarnCoin'     => $userInfo['moderatorLevelCoin'],
             'headPic'           => $userInfo['headPic'],
-            'verified'          => $userInfo['verified'],
-            'verifyInfo'        => $userInfo['verifyInfo'],
-            'earnCoin'             => $userInfo[''],
+            'verified'          => isset($userInfo['verified']) ? $userInfo['verified'] : '',
+            'verifyInfo'        => isset($userInfo['verifyInfo']) ? $userInfo['verifyInfo'] : '',
+            'earnCoin'          => '',
         );
 
         $result = array(
             'rid'               => $roomInfo['rid'],
-            'msgIp'             => $roomInfo['msgIp'],
+            'msgIP'             => $roomInfo['msgIP'],
             'msgPort'           => $roomInfo['msgPort'],
             'videoPlayDomain'   => $roomInfo['videoPlayDomain'],
             'videoPublishDomain'=> $roomInfo['videoPublishDomain'],

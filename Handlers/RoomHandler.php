@@ -61,6 +61,35 @@ class RoomHandler
     }
 
     /**
+     * 请求直播推流地址
+     * @param object $oInput
+     * @return mixed|string
+     */
+    public function requestLiveAddress($oInput){
+
+        $user_id  = $oInput->get('uid', '');     // 进入房间的用户ID
+        $room_id  = $oInput->get('rid', '');     // 房间ID
+        $screen_width  = $oInput->get('screenWidth', '');     // 推流视频宽高
+        $screen_height  = $oInput->get('screenHeight', '');     // 推流视频宽高
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $address = $this->roomModule->getLiveAddress($room_id);
+
+            $response = array(
+                'encrypted' => $address
+            );
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+    /**
      * 主播信息列表
      * @param object $oInput
      * @return mixed|string
