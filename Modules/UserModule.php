@@ -303,7 +303,7 @@ class UserModule
             if ($status = 1){
                 $user_info = $this->userTable->select(
                     [
-                        "[><]lz_user_auth(b)" => ['uid' => 'uid']
+                        "[><]lz_user_auth(b)" => ['a.uid' => 'b.uid']
                     ],
                     [
                         'AND' => ['a.type' => GlobalConfig::USER_MODER],
