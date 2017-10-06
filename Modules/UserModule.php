@@ -289,13 +289,13 @@ class UserModule
             // 该用户关注的主播信息
             $user_info = $this->userTable->select(
                 [
-                    "[><]lz_user_attention(b)" => ['beAttentionUid' => 'uid','attentionUid' => $req_uid]
+                    "[><]lz_user_attention(b)" => ['uid' => 'beAttentionUid']
                 ],
                 [
-                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                    'AND' => ['a.type' => GlobalConfig::USER_MODER, 'b.attentionUid' => $req_uid],
                     'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
                 ],
-                ['a.*']
+                ['*']
             );
             var_dump($user_info);
         }
@@ -309,7 +309,7 @@ class UserModule
                         'AND' => ['a.type' => GlobalConfig::USER_MODER],
                         'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
                     ],
-                    ['a.*']);
+                    ['*']);
             }
             else{// ($status = 2){
                 // TODO
