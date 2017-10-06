@@ -291,11 +291,11 @@ class UserModule
                 [
                     "[><]lz_user_attention(b)" => ['beAttentionUid' => 'uid','attentionUid' => $req_uid]
                 ],
-                ['a.*'],
                 [
                     'AND' => ['a.type' => GlobalConfig::USER_MODER],
                     'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
-                ]
+                ],
+                ['a.*']
             );
             var_dump($user_info);
         }
@@ -305,11 +305,11 @@ class UserModule
                     [
                         "[><]lz_user_auth(b)" => ['uid' => 'uid']
                     ],
-                    ['a.*'],
                     [
                         'AND' => ['a.type' => GlobalConfig::USER_MODER],
                         'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
-                    ]);
+                    ],
+                    ['a.*']);
             }
             else{// ($status = 2){
                 // TODO
@@ -320,20 +320,20 @@ class UserModule
                 [
                     "[><]lz_moder_sign(b)" => ['uid' => 'uid','signID' => $tagID]
                 ],
-                ['a.*'],
                 [
                     'AND' => ['a.type' => GlobalConfig::USER_MODER],
                     'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
-                ]
+                ],
+                ['a.*']
             );
         }
         else{
             $user_info = $this->userTable->select('',
-                '*',
                 [
                     'AND' => ['a.type' => GlobalConfig::USER_MODER],
                     'ORDER' => ['a.isPlaying' => 'DESC']
-                ]
+                ],
+                '*'
             );
         }
         var_dump($user_info);
