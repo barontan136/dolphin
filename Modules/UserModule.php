@@ -318,13 +318,13 @@ class UserModule
         elseif($tagID > 0){
             $user_info = $this->userTable->select(
                 [
-                    "[><]lz_moder_sign(b)" => ['uid' => 'uid','signID' => $tagID]
+                    "[><]lz_moder_sign(b)" => ['a.uid' => 'uid']
                 ],
                 [
-                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
+                    'AND' => ['a.type' => GlobalConfig::USER_MODER, 'b.signID' => $tagID],
                     'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
                 ],
-                ['a.*']
+                'a.*'
             );
         }
         else{
