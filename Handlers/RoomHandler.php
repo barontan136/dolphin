@@ -65,6 +65,29 @@ class RoomHandler
      * @param object $oInput
      * @return mixed|string
      */
+    public function getInfo($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');     // 进入房间的用户ID
+        $room_id  = $oInput->get('rid', '');     // 房间ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $response = $this->roomModule->getRoomDetail($user_id, $room_id);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+    /**
+     * 主播信息列表
+     * @param object $oInput
+     * @return mixed|string
+     */
     public function getRooms($oInput)
     {
         $user_id  = $oInput->get('uid', '');     // 0：最新 1：热门 10：关注

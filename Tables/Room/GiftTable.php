@@ -18,6 +18,14 @@ class GiftTable extends RoomBase
     }
 
     /**
+     * 获取所有可用礼物列表
+     * @return mixed
+     */
+    public function getGiftList(){
+        return $this->medoo->select($this->table(), '*', ['status' => 1]);
+    }
+
+    /**
      * @param $where
      * @param $join
      * @param string $field

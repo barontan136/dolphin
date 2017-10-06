@@ -18,6 +18,37 @@ class UserAttentionTable extends UserBase
     }
 
     /**
+     * 获取用户关注信息
+     * @return mixed
+     */
+    public function getAttBetweenUsers($user_id, $mod_id){
+
+        return $this->medoo->get(
+            $this->table(),
+            '*',
+            [
+                'AND' => [
+                    'beAttentionUid' => $mod_id,
+                    'attentionUid' => $user_id,
+                    'status' => 1
+                ]
+            ]
+        );
+    }
+    /**
+     * 检查两个用户是否有关注关系
+     * @return mixed
+     */
+    public function checkAttUsers($user_id, $mod_id){
+        $att = $this->getAttBetweenUsers($user_id, $mod_id);
+        if (empty($att)){
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * @param $where
      * @param $join
      * @param string $field

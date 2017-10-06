@@ -18,6 +18,28 @@ class RoomAdminTable extends RoomBase
     }
 
     /**
+     * 获取该房间的管理员列表
+     * @param $roomID
+     * @return mixed
+     */
+    public function getRoomAdminIdsByID($roomID){
+        $where = array(
+            'rid' => $roomID,
+            'status' => 1
+        );
+        return $this->getRoomAdmin('uid', $where);
+    }
+
+    /**
+     * @param $field
+     * @param $where
+     * @return mixed
+     */
+    public function getRoomAdmin($field='*', $where){
+        return $this->select('', $where, $field);
+    }
+
+    /**
      * @param $where
      * @param $join
      * @param string $field

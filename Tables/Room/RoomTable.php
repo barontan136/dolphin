@@ -31,6 +31,20 @@ class RoomTable extends RoomBase
         }
     }
 
+    /**
+     * 获取房间信息
+     * @param $roomID
+     * @return mixed
+     */
+    public function getRoomInfo($where){
+        return $this->medoo->get($this->table(), '*', $where);
+    }
+
+    /**
+     * 根据rid获取自增主播ID
+     * @param $roomID
+     * @return mixed
+     */
     public  function  getAutoIDByRoomId($roomID){
         return $this->medoo->get($this->table(), 'autoID', ['rid' => $roomID]);
     }

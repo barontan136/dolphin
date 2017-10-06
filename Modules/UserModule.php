@@ -328,22 +328,30 @@ class UserModule
             );
         }
         //
+        $roomTable = new RoomTable();
         $result = array();
-        foreach($user_list as $info){
-            $item['rid']            = $info['rid'];
-            $item['sex']            = $info['sex'];
-            $item['mid']            = $info['mid'];
-            $item['nickname']       = $info['nickname'];
-            $item['headPic']        = $info['headPic'];
-            $item['isPlaying']      = $info['isPlaying'];
-            $item['playStartTime']  = $info['rid'];
-            $item['onlineNum']      = $info['onlineNum'];
-            $item['fansNum']        = $info['fansNum'];
-            $item['announcement']   = $info['roomTitle'];
+        foreach($user_list as $info) {
+            $item['rid'] = $info['rid'];
+            $item['sex'] = $info['sex'];
+            $item['mid'] = $info['mid'];
+            $item['nickname'] = $info['nickname'];
+            $item['headPic'] = $info['headPic'];
+            $item['isPlaying'] = $info['isPlaying'];
+//            $item['playStartTime']  = $info['rid'];
+//            $item['onlineNum']      = $info['onlineNum'];
+            $item['fansNum'] = $info['fansNum'];
+            $item['announcement'] = $info['roomTitle'];
             $item['moderatorLevel'] = $info['moderatorLevel'];
-            $item['verified']       = isset($info['verified']) ? $info['verified'] : '';
-            $item['verifyInfo']     = isset($info['verifyInfo']) ? $info['verified'] : '';
-            $item['videoPlayUrl']   = $info['videoPlayUrl'];
+            $item['verified'] = isset($info['verified']) ? $info['verified'] : '';
+            $item['verifyInfo'] = isset($info['verifyInfo']) ? $info['verified'] : '';
+            $item['videoPlayUrl'] = $info['videoPlayUrl'];
+
+            if (isset($item['rid']) && !empty($item['rid'])) {
+
+                $roomInfo = $roomTable->getRoomInfo(['rid'=>$item['rid']]);
+                $item['onlineNum'] = $roomInfo['onlineNum'];
+                $item['playStartTime'] = $roomInfo['lastStartTime'];
+            }
 
             $result = array_merge($result, $item);
         }

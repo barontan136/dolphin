@@ -17,6 +17,8 @@ class UserGiftsTable extends UserBase
         parent::__construct();
     }
 
+
+
     /**
      * @param $where
      * @param $join
