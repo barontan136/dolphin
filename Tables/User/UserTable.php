@@ -25,7 +25,7 @@ class UserTable extends UserBase
      */
     public function select($join='',$where,$field='*'){
         if(!empty($join)){
-            return $this->medoo->select($this->table().'(a)',$join,$field,$where);
+            return $this->medoo->debug()->select($this->table().'(a)',$join,$field,$where);
         }else{
             return $this->medoo->select($this->table(),$field,$where);
         }

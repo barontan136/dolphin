@@ -287,7 +287,7 @@ class UserModule
         );
         if ($req_uid != '' && $status == 10){// 0：所有 1：最新 2：热门 10：关注
             // 该用户关注的主播信息
-            $user_info = $this->userTable->debug()->select(
+            $user_info = $this->userTable->select(
                 [
                     "[><]lz_user_attention(b)" => ['beAttentionUid' => 'uid','attentionUid' => $req_uid]
                 ],
@@ -301,7 +301,7 @@ class UserModule
         }
         elseif ($status > 0){// 0：所有 1：最新 2：热门 10：关注
             if ($status = 1){
-                $user_info = $this->userTable->debug()->select(
+                $user_info = $this->userTable->select(
                     [
                         "[><]lz_user_auth(b)" => ['uid' => 'uid']
                     ],
@@ -316,7 +316,7 @@ class UserModule
             }
         }
         elseif($tagID > 0){
-            $user_info = $this->userTable->debug()->select(
+            $user_info = $this->userTable->select(
                 [
                     "[><]lz_moder_sign(b)" => ['uid' => 'uid','signID' => $tagID]
                 ],
@@ -328,7 +328,7 @@ class UserModule
             );
         }
         else{
-            $user_info = $this->userTable->debug()->select('',
+            $user_info = $this->userTable->select('',
                 '*',
                 [
                     'AND' => ['a.type' => GlobalConfig::USER_MODER],
