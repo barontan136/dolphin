@@ -277,17 +277,9 @@ class UserModule
      */
     public function getModerators($req_uid = 0, $status = 0, $tagID = 0){
 
-        $authTable = new UserAuthTable();
-        $userSignTable = new ModerSignTable();
-        $where_user = array(
-            'type' => GlobalConfig::USER_MODER
-        );
-        $where_user_auth = array(
-            'status' => 1
-        );
         if ($req_uid != '' && $status == 10){// 0：所有 1：最新 2：热门 10：关注
             // 该用户关注的主播信息
-            $user_info = $this->userTable->select(
+            $user_list = $this->userTable->select(
                 [
                     "[><]lz_user_attention(b)" => ['a.uid' => 'beAttentionUid']
                 ],
@@ -297,11 +289,10 @@ class UserModule
                 ],
                 '*'
             );
-            var_dump($user_info);
         }
         elseif ($status > 0){// 0：所有 1：最新 2：热门 10：关注
             if ($status = 1){
-                $user_info = $this->userTable->select(
+                $user_list = $this->userTable->select(
                     [
                         "[><]lz_user_auth(b)" => ['a.uid' => 'uid']
                     ],
@@ -316,7 +307,7 @@ class UserModule
             }
         }
         elseif($tagID > 0){
-            $user_info = $this->userTable->select(
+            $user_list = $this->userTable->select(
                 [
                     "[><]lz_moder_sign(b)" => ['a.uid' => 'uid']
                 ],
@@ -324,11 +315,11 @@ class UserModule
                     'AND' => ['a.type' => GlobalConfig::USER_MODER, 'b.signID' => $tagID],
                     'ORDER' => ['a.isPlaying' => 'DESC', 'b.updateDatetime' => 'DESC']
                 ],
-                'a.*'
+                '*'
             );
         }
         else{
-            $user_info = $this->userTable->select('',
+            $user_list = $this->userTable->select('',
                 [
                     'AND' => ['type' => GlobalConfig::USER_MODER],
                     'ORDER' => ['isPlaying' => 'DESC']
@@ -336,10 +327,28 @@ class UserModule
                 '*'
             );
         }
-        var_dump($user_info);
         //
+        $result = array();
+        foreach($user_list as $info){
+            $item['rid']            = $info['rid'];
+            $item['sex']            = $info['sex'];
+            $item['mid']            = $info['mid'];
+            $item['nickname']       = $info['nickname'];
+            $item['headPic']        = $info['headPic'];
+            $item['isPlaying']      = $info['isPlaying'];
+            $item['playStartTime']  = $info['rid'];
+            $item['onlineNum']      = $info['onlineNum'];
+            $item['fansNum']        = $info['fansNum'];
+            $item['announcement']   = $info['roomTitle'];
+            $item['moderatorLevel'] = $info['moderatorLevel'];
+            $item['verified']       = isset($info['verified']) ? $info['verified'] : '';
+            $item['verifyInfo']     = isset($info['verifyInfo']) ? $info['verified'] : '';
+            $item['videoPlayUrl']   = $info['videoPlayUrl'];
 
-        return $user_info;
+            $result = array_merge($result, $item);
+        }
+
+        return $result;
     }
 
 
