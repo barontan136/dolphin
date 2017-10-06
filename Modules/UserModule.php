@@ -330,8 +330,8 @@ class UserModule
         else{
             $user_info = $this->userTable->select('',
                 [
-                    'AND' => ['a.type' => GlobalConfig::USER_MODER],
-                    'ORDER' => ['a.isPlaying' => 'DESC']
+                    'AND' => ['type' => GlobalConfig::USER_MODER],
+                    'ORDER' => ['isPlaying' => 'DESC']
                 ],
                 '*'
             );
