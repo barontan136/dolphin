@@ -80,7 +80,6 @@ class WebsocketHandler
             $response = $user_info;
 
         } while(false);
-        var_dump($response);
 
         return Response::api_response(
             Common::getAction(__FUNCTION__),
