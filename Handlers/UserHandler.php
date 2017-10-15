@@ -50,6 +50,31 @@ class UserHandler
 
 
     /**
+     * 用户登陆
+     * @return mixed
+     */
+    public function login($oInput){
+
+        $mobile  = $oInput->get('mobile', '');       // 用户手机号
+        $password  = $oInput->get('password', '');    // 用户密码
+
+        $errcode = '0';
+        $response = [];
+        try{
+            $sign_data = $this->userModule->getSignTypes();
+
+        }catch(\Exception $e){
+        }
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+
+    /**
      * 获取直播标签列表
      * @return mixed
      */

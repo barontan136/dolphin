@@ -43,6 +43,25 @@ class UserModule
      * @param string | array $fields
      * @return mixed
      */
+    public function login()
+    {
+        $ret = $this->signType->select('', '', '*');
+        $result = [];
+        //
+        foreach($ret as $item){
+            $key = $item['signID'];
+            $val = $item['signName'];
+            $result[$key] = $val;
+        }
+        return $result;
+    }
+
+    /**
+     * 获取用户注册信息
+     * @param string $user_id
+     * @param string | array $fields
+     * @return mixed
+     */
     public function getSignTypes()
     {
         $ret = $this->signType->select('', '', '*');

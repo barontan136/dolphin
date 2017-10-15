@@ -68,7 +68,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
 
     $module = trim($jArr['module']);     //模块名称
     $action = trim($jArr['method']);     //方法名称
-    $params = $jArr['ras'];           //请求参数,DES_CBC加密
+//    $params = $jArr['ras'];           //请求参数,DES_CBC加密
     $token = $jArr['token'];            //上次服务端返回给客户端的token
     $ver = $jArr['version'];              //客户端版本号
     $pla = intval($jArr['platform']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
@@ -100,8 +100,8 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
     }
 
     $rawArr = [];
-    $rawArr = json_decode($params, true);
-    $newArr = array('a'=>$action, 'r'=>$rawArr, 'c'=>[
+//    $rawArr = json_decode($params, true);
+    $newArr = array('a'=>$action, 'r'=>$jArr, 'c'=>[
         'ip'       => $IP,
         'token'    => $token, //上次服务端返回给客户端的token
         'module'   => $module, //模块名称
@@ -147,7 +147,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
         $task->connect();
 
     } catch (\Exception $e) {
-        $logger->info(sprintf("[Exception][%s][%s][%s][%s]", $module, $action, $isEncrypt, $params));
+        $logger->info(sprintf("[Exception][%s][%s][%s][%s]", $module, $action, $isEncrypt, $jArr));
         $aResult = array(
             "return_code" => "10001",
             "return_message" => sprintf(

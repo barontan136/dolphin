@@ -42,7 +42,7 @@ class WebsocketHandler
 
             Gateway::joinGroup($client_id, $room_id);
             $_SESSION['room_id'] = $room_id;
-            $_SESSION['client_name'] = $user_info['user_name'];
+            $_SESSION['client_name'] = $user_info['regMobile'];
 
         } while(false);
 
