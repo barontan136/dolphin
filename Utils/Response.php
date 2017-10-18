@@ -9,7 +9,7 @@ class Response {
 	* @param array $data 数据
 	* return string
 	*/
-	public static function api_response($cmd, $code, $message='', $data=array()){
+	public static function api_response($code, $message='', $data=array(), $cmd = ''){
 		$type = 'json';
 
 		switch ($type) {
@@ -22,6 +22,18 @@ class Response {
 			default:
 				return self::response_json($cmd, $code, $message, $data);
 		}
+	}
+
+
+	/*
+	* 封装websocket返回接口
+	* @param integer $code 状态码
+	* @param string $message 状态信息
+	* @param array $data 数据
+	* return string
+	*/
+	public static function ws_response($cmd, $code, $message= '', $data=array()){
+		return self::response_json($cmd, $code, $message, $data);
 	}
 
 	/*
@@ -90,10 +102,13 @@ class Response {
 //			return '';
 //		}
 		$result = array(
-		    'cmd' => $cmd,
 			'errno' => $code,
 			'msg' => $message
 			);
+
+		if ($cmd){
+			array_unshift($result, array('cmd'=>$cmd));
+		}
 
 		if(!empty($data)) {
 			$result['data'] = self::type_conversion($data);

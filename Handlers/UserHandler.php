@@ -50,6 +50,31 @@ class UserHandler
 
 
     /**
+     * 用户登陆
+     * @return mixed
+     */
+    public function login($oInput){
+
+        $mobile  = $oInput->get('mobile', '');       // 用户手机号
+        $password  = $oInput->get('password', '');    // 用户密码
+
+        $errcode = '0';
+        $response = [];
+        try{
+            $sign_data = $this->userModule->getSignTypes();
+
+        }catch(\Exception $e){
+        }
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+
+    /**
      * 获取直播标签列表
      * @return mixed
      */
@@ -82,21 +107,32 @@ class UserHandler
         $user_id  = $oInput->get('uid', '');       // 用户ID
         $mobile  = $oInput->get('mobile', '');    // 接收短信的手机号
 
+        var_dump($user_id, $mobile);
+
         $response = [];
         $errcode = '0';
-        //发送短信信息
-        try {//发送验证码
-            $data = array(
-                'tpl_id' => 'SMS_10410948',
-                'code' => $this->smsModule->createSmsContent()
-            );
-            $this->log->info(sprintf("sendMessage->reg_mobile:%s, user_id:%s, code:%s", $mobile, $user_id, $data['code']));
-            if (!$this->smsModule->sendSms($mobile, $data, $user_id)) {
-                $errcode = $this->smsModule->getErrCode();
+
+        do{
+            if (strlen($mobile) < 10 || strlen($mobile) > 13){
+                $errcode = '10005';
+                break;
             }
-        } catch (\Exception $e) {
-            return Response::api_response($e->getCode(), $e->getMessage());
-        }
+
+            //发送短信信息
+            try {//发送验证码
+                $data = array(
+                    'tpl_id' => 'SMS_10410948',
+                    'code' => $this->smsModule->createSmsContent()
+                );
+                $this->log->info(sprintf("sendMessage->reg_mobile:%s, user_id:%s, code:%s", $mobile, $user_id, $data['code']));
+                if (!$this->smsModule->sendSms($mobile, $data, $user_id)) {
+                    $errcode = $this->smsModule->getErrCode();
+                }
+            } catch (\Exception $e) {
+                return Response::api_response($e->getCode(), $e->getMessage());
+            }
+        }while(0);
+
 
         return Response::api_response(
             $errcode,
