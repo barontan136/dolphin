@@ -38,7 +38,12 @@ class UserHandler
         $errcode = '0';
         $response = [];
         do {
-            $response = $this->userModule->getUserInfo($user_id);
+            $result = $this->userModule->getUserInfo($user_id);
+            if ($result == null){
+                $errcode = '999002';
+                break;
+            }
+            $response = $result;
         } while(false);
 
         return Response::api_response(

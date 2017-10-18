@@ -284,6 +284,9 @@ class UserModule
     public function getUserInfo($user_id)
     {
         $user_info = $this->userTable->getUserInfoByUserId($user_id);
+        if (empty($user_info)){
+            return null;
+        }
         $ret_data = array(
             'uid' => $user_info['uid'],
             'nickname' => $user_info['nickname'],
