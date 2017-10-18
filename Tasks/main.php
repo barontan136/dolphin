@@ -89,7 +89,7 @@ $http->onMessage = function ($connection, $data) use ($logger, $config, $des) {
             "return_message" => "参数不完整",
             'token' => Token::getToken(),
         );
-        $newArr = array('a'=>$action, 'r'=>$params, 'c'=>[
+        $newArr = array('a'=>$action, 'r'=>$jArr, 'c'=>[
             'ip'       => $IP,
             'token'    => $token,   //上次服务端返回给客户端的token
             'module'   => $module,  //模块名称
