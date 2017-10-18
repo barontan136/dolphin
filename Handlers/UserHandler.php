@@ -33,7 +33,7 @@ class UserHandler
      */
     public function getUserInfo($oInput)
     {
-        $user_id  = $oInput->get('uid', '1'); //设备惟一标识
+        $user_id  = $oInput->get('uid', ''); //设备惟一标识
 
         $errcode = '0';
         $response = [];
