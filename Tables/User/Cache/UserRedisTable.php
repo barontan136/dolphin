@@ -15,10 +15,45 @@ class UserRedisTable
     private $userStatic = "lzus:%s"; //用户静态信息，不经常改动，数据结构：HASH
     private $userDynamic = "lzud:%s"; //用户动态信息，经常变动，数据结构：HASH
     private $name2id = "lzun:%s"; //用户名(手机号)到用户id的映射，数据结构：键值对
+    private $readyUid = "readyuser:%s";//待注册的用户信息
 
     public function __construct()
     {
         $this->cache = RedisClient::getInstance();
+    }
+
+    /**
+     * 设置待注册用户,注册信息
+     * @param $user_id string
+     * @param $user_data array
+     * @return bool
+     */
+    public function setUserReadyDataByUserId($user_id, $user_data)
+    {
+        /**
+         * user_data 数据结构(HASH)
+         * name => 用户名称(手机号)
+         * device_id => 设备惟一标识ID
+         */
+        if ($user_id && is_array($user_data)) {
+            $key = sprintf($this->readyUid, $user_id);
+            return $this->cache->hMSet($key, $user_data);
+        }
+        return false;
+    }
+
+    /**
+     * 根据user_id获取用户基本信息的hash全部属性值
+     * @param $user_id string
+     * @return mixed
+     */
+    public function getUserReadyDataByUserId($user_id)
+    {
+        if ($user_id) {
+            $key = sprintf($this->readyUid, $user_id);
+            return $this->cache->hGetAll($key);
+        }
+        return false;
     }
 
     /**

@@ -206,28 +206,15 @@ class UserHandler
             $response['access_token'] = $access_token;
         }
         elseif (empty($user_info)){
-            // 新增用户,手机号为mobile,密码随机
+            // 新增用户,手机号为mobile
             try{
                 // 手机号注册逻辑
-                $user_data = $this->userModule->registerByMobile(
-                    $mobile,
-                    0,
-                    $device_id
-                );
-                $user_id = $user_data['uid'];
+                $user_id = $this->userModule->setReadyUserData($mobile, $device_id);
             }catch(\Exception $e){
-
+                // TODO
             }
-
-            $access_token = $this->token->createAccessToken(
-                $user_id,
-                $device_id,
-                0
-            );
-            $response['access_token'] = $access_token;
         }
         $response['user_id'] = $user_id;
-
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode]);
     }
@@ -238,39 +225,43 @@ class UserHandler
      */
     public function userRegister($oInput)
     {
-        $user_id = $oInput->get('uid', '');       // 用户ID
-        $device_num = $oInput->get('‘deviceName’', '');       // 密码
+        $user_id = $oInput->get('uid', '');             // 用户ID
         $password = $oInput->get('password', '');       // 密码
+        $plateform = $oInput->get('plateform', 0);      // 平台
+        $source = $oInput->get('source', 0);            // 来源
 
         $response = [];
         $errcode = '0';
-        // 校验UID是否存在Redis
-        // TODO
-        $mobile = '13418547378';
+        do {
+            // 校验UID是否存在Redis
+            $user_data_ready = $this->userModule->getReadyUserData($user_id);
+            if (empty($user_data_ready) || !isset($user_data_ready['regMobile'])) {
+                $errcode = '999001';
+                break;
+            }
+            // 新增用户,手机号为mobile,
+            try {
+                // 手机号注册逻辑
+                $user_data = $this->userModule->registerByMobile(
+                    $user_data_ready['regMobile'],
+                    $source,
+                    $user_data_ready['deviceNum'],
+                    $password,
+                    $user_id
+                );
+            } catch (\Exception $e) {
+                // TODO
+            }
 
-        // 新增用户,手机号为mobile,
-        try{
-            // 手机号注册逻辑
-            $user_data = $this->userModule->registerByMobile(
-                $mobile,
-                0,
-                $device_num,
-                $password,
-                $user_id
+            $access_token = $this->token->createAccessToken(
+                $user_id,
+                $user_data['deviceNum'],
+                $plateform
             );
-        }catch(\Exception $e){
 
-        }
-
-        $access_token = $this->token->createAccessToken(
-            $user_id,
-            $device_num,
-            0
-        );
+        }while(0);
         $response['access_token'] = $access_token;
-
         $response['user_id'] = $user_id;
-
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode]);
     }

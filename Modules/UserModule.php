@@ -26,6 +26,35 @@ class UserModule
         $this->signType = new SignTypeTable();
     }
 
+
+    /**
+     * 短信验证码通过后,缓存用户注册信息
+     * @param string $reg_mobile
+     * @param string $dev_num
+     * @return mixed
+     */
+    public function setReadyUserData($reg_mobile, $dev_num){
+        $user_id = $this->userTable->genId();
+        $user_data = array(
+            'user_id' => $user_id,
+            'name' => $reg_mobile,
+            'regMobile' => $reg_mobile,
+            'deviceNum' => $dev_num
+        );
+        $this->userCacheTable->setUserReadyDataByUserId($user_id, $user_data);
+        return $user_id;
+    }
+
+    /**
+     * 获取用户预注册的缓存信息
+     * @param string $user_id
+     * @return mixed
+     */
+    public function getReadyUserData($user_id){
+
+        return $this->userCacheTable->getUserReadyDataByUserId($user_id);
+    }
+
     /**
      * 获取用户注册信息
      * @param string $user_id
