@@ -30,9 +30,9 @@ class WebsocketHandler
      */
     public function login($oInput)
     {
-        $user_id  = $oInput->get('uid', '1'); // 用户ID
-        $room_id  = $oInput->get('rid', '1'); // 房间ID
-        $client_id  = $oInput->get('client_id', '1'); // socket connect id
+        $user_id  = $oInput->get('uid', ''); // 用户ID
+        $room_id  = $oInput->get('rid', ''); // 房间ID
+        $client_id  = $oInput->get('client_id', ''); // socket connect id
 
         $errcode = '0';
         $response = [];
@@ -62,9 +62,9 @@ class WebsocketHandler
      */
     public function sendMsg($oInput)
     {
-        $user_id  = $oInput->get('uid', '0');           // 用户ID
-        $room_id  = $oInput->get('rid', '0');           // 房间ID
-        $to_user_id  = $oInput->get('toUid ', '0');     // 发送消息的对象
+        $user_id  = $oInput->get('uid', '');           // 用户ID
+        $room_id  = $oInput->get('rid', '');           // 房间ID
+        $to_user_id  = $oInput->get('toUid ', '');     // 发送消息的对象
         $msg  = $oInput->get('msg  ', '');              // 消息内容
 
         // 登陆时保存的room_id
@@ -76,8 +76,8 @@ class WebsocketHandler
         $errcode = '0';
         $response = [];
         do {
-            $user_info = $this->user->getUserInfo($user_id);
-            $response = $user_info;
+            $response = $this->user->getUserInfo($user_id);
+//            $response = $user_info;
 
         } while(false);
         var_dump($response);
@@ -98,16 +98,15 @@ class WebsocketHandler
      */
     public function sendGift($oInput)
     {
-        $user_id  = $oInput->get('uid', '0');           // 用户ID
-        $room_id  = $oInput->get('rid', '0');           // 房间ID
-        $p_id  = $oInput->get('pid', '0');     // 礼物ID
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+        $p_id  = $oInput->get('pid', '');               // 礼物ID
         $p_num  = $oInput->get('num', '');              // 数量
 
         $errcode = '0';
         $response = [];
         do {
-            $user_info = $this->user->getUserInfo($user_id);
-            $response = $user_info;
+
         } while(false);
         var_dump($response);
 
