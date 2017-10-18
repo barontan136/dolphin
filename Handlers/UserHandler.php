@@ -201,7 +201,7 @@ class UserHandler
         $user_info = $this->userModule->getUserInfoByMobile($mobile);
         if (isset($user_info['uid']) && $user_info['uid'] == $user_id){
             // 表示登录或者绑定，刷新access_token，并返回
-            //每次登录都重新生成access_token
+            // 每次登录都重新生成access_token
             $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
             $response['access_token'] = $access_token;
         }
@@ -226,6 +226,49 @@ class UserHandler
             );
             $response['access_token'] = $access_token;
         }
+        $response['user_id'] = $user_id;
+
+
+        return Response::api_response($errcode, ErrMessage::$message[$errcode]);
+    }
+
+    /**
+     * 注册接口
+     * @return mixed
+     */
+    public function userRegister($oInput)
+    {
+        $user_id = $oInput->get('uid', '');       // 用户ID
+        $device_num = $oInput->get('‘deviceName’', '');       // 密码
+        $password = $oInput->get('password', '');       // 密码
+
+        $response = [];
+        $errcode = '0';
+        // 校验UID是否存在Redis
+        // TODO
+        $mobile = '13418547378';
+
+        // 新增用户,手机号为mobile,
+        try{
+            // 手机号注册逻辑
+            $user_data = $this->userModule->registerByMobile(
+                $mobile,
+                0,
+                $device_num,
+                $password,
+                $user_id
+            );
+        }catch(\Exception $e){
+
+        }
+
+        $access_token = $this->token->createAccessToken(
+            $user_id,
+            $device_num,
+            0
+        );
+        $response['access_token'] = $access_token;
+
         $response['user_id'] = $user_id;
 
 

@@ -122,21 +122,25 @@ class UserModule
     public function registerByMobile(
         $regMobile,
         $source,
-        $deviceNum
+        $deviceNum,
+        $password,
+        $user_id = ''
     )
     {
         do{
             $configModule = new ConfigModule();
             $now = date('Y-m-d H:i:s');
-            $user_id = $this->userTable->genId();
+            if ($user_id){
+                $user_id = $this->userTable->genId();
+            }
             //登录密码根据加密规则加密，存储数据库的是加密后的密文
 //            $pwd_md5 = md5(md5($password) . $salt);
             $user_data = array(
-                'uid'       => $user_id,
+                'uid'          => $user_id,
                 'nickname'     => $regMobile,
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
-                'password'     => '',
+                'password'     => $password,
                 'salt'         => '0000',
                 'deviceNum'    => $deviceNum,
                 'source'       => $source,
