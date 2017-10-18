@@ -221,7 +221,7 @@ class UserHandler
         }
         $response['user_id'] = $user_id;
 
-        return Response::api_response($errcode, ErrMessage::$message[$errcode]);
+        return Response::api_response($errcode, ErrMessage::$message[$errcode], $response);
     }
 
     /**
