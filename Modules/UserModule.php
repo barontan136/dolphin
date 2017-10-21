@@ -311,12 +311,14 @@ class UserModule
             'moderatorLevelName' => $user_info['moderatorLevelName'],
             'moderatorNextLevel' => $user_info['moderatorNextLevel'],
             'moderatorNextLevelNeedCoin' => $user_info['moderatorNextLevelNeedCoin'],
-            'isPlaying' => $user_info['isPlaying'],
+            'isPlaying'    => $user_info['isPlaying'],
             'videoPlayUrl' => $user_info['videoPlayUrl'],
-            'rid' => $user_info['rid'],
-            'verified' => isset($user_info['verified'])?$user_info['verified']:'',
-            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verified']:'',
+            'rid'          => $user_info['rid'],
+            'verified'     => isset($user_info['verified'])?$user_info['verified']:'',
+            'verifyInfo'   => isset($user_info['verifyInfo'])?$user_info['verified']:'',
             'flowerNumber' => $user_info['flowerNumber'],
+            'guardType'    => $user_info['guardType'],
+            'lowkeyEnter'  => $user_info['lowkeyEnter'],
         );
 
         return $ret_data;
@@ -408,6 +410,7 @@ class UserModule
                 $item['playStartTime'] = $roomInfo['lastStartTime'];
             }
 
+            array_push($result, $item)
             $result = array_merge($result, $item);
         }
 
