@@ -208,7 +208,7 @@ class UserHandler
             // 表示登录或者绑定，刷新access_token，并返回
             // 每次登录都重新生成access_token
             $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
-            $response['access_token'] = $access_token;
+            $response['accessToken'] = $access_token;
         }
         elseif (empty($user_info)){
             // 新增用户,手机号为mobile
@@ -219,7 +219,7 @@ class UserHandler
                 // TODO
             }
         }
-        $response['user_id'] = $user_id;
+        $response['uid'] = $user_id;
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode], $response);
     }
