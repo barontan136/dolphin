@@ -410,7 +410,7 @@ class UserModule
 
                 $roomInfo = $roomTable->getRoomInfo(['rid'=>$item['rid']]);
                 $item['onlineNum'] = intval($roomInfo['onlineNum']);
-                $item['playStartTime'] = !empty($roomInfo['lastStartTime']) ? $roomInfo['lastStartTime'] : time();
+                $item['playStartTime'] = !empty($roomInfo['lastStartTime']) ? strtotime($roomInfo['lastStartTime']) : time();
             }
 
             array_push($result, $item);
