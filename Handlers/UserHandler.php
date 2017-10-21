@@ -130,9 +130,9 @@ class UserHandler
                     'code' => $this->smsModule->createSmsContent()
                 );
                 $this->log->info(sprintf("sendMessage->reg_mobile:%s, user_id:%s, code:%s", $mobile, $user_id, $data['code']));
-                if (!$this->smsModule->sendSms($mobile, $data, $user_id)) {
+                /*if (!$this->smsModule->sendSms($mobile, $data, $user_id)) {
                     $errcode = $this->smsModule->getErrCode();
-                }
+                }*/
             } catch (\Exception $e) {
                 return Response::api_response($e->getCode(), $e->getMessage());
             }
