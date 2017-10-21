@@ -265,8 +265,8 @@ class UserHandler
             );
 
         }while(0);
-        $response['access_token'] = $access_token;
-        $response['user_id'] = $user_id;
+        $response['accessToken'] = $access_token;
+        $response['uid'] = $user_id;
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode], $response);
     }
