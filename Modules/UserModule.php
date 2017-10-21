@@ -149,10 +149,12 @@ class UserModule
      * @return mixed
      */
     public function registerByMobile(
+        $nickname,
         $regMobile,
         $source,
         $deviceNum,
         $password,
+        $sex,
         $user_id = ''
     )
     {
@@ -166,7 +168,9 @@ class UserModule
 //            $pwd_md5 = md5(md5($password) . $salt);
             $user_data = array(
                 'uid'          => $user_id,
-                'nickname'     => $regMobile,
+                'userName'     => $regMobile,
+                'nickname'     => $nickname,
+                'sex'          => $sex,
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
                 'password'     => $password,

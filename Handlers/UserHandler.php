@@ -234,6 +234,8 @@ class UserHandler
         $password = $oInput->get('password', '');       // 密码
         $plateform = $oInput->get('plateform', 0);      // 平台
         $source = $oInput->get('source', 0);            // 来源
+        $nickname = $oInput->get('userName', '');       // 昵称
+        $sex = $oInput->get('sex', 0);                  // 男女
 
         $response = [];
         $errcode = '0';
@@ -244,14 +246,24 @@ class UserHandler
                 $errcode = '999001';
                 break;
             }
+
+            // 检查用户是否存在
+            $user_info = $this->userModule->getUserInfoByMobile($user_data_ready['regMobile']);
+            if ($user_info){
+                $errcode = '999002';
+                break;
+            }
+
             // 新增用户,手机号为mobile,
             try {
                 // 手机号注册逻辑
                 $user_data = $this->userModule->registerByMobile(
+                    $nickname,
                     $user_data_ready['regMobile'],
                     $source,
                     $user_data_ready['deviceNum'],
                     $password,
+                    $sex,
                     $user_id
                 );
             } catch (\Exception $e) {
@@ -263,7 +275,6 @@ class UserHandler
                 $user_data['deviceNum'],
                 $plateform
             );
-
         }while(0);
         $response['accessToken'] = $access_token;
         $response['uid'] = $user_id;
