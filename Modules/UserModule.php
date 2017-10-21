@@ -409,11 +409,12 @@ class UserModule
             if (isset($item['rid']) && !empty($item['rid'])) {
 
                 $roomInfo = $roomTable->getRoomInfo(['rid'=>$item['rid']]);
-                $item['onlineNum'] = $roomInfo['onlineNum'];
-                $item['playStartTime'] = $roomInfo['lastStartTime'];
+                $item['onlineNum'] = intval($roomInfo['onlineNum']);
+                $item['playStartTime'] = !empty($roomInfo['lastStartTime']) ? $roomInfo['lastStartTime'] : time();
             }
 
-            $result = array_merge($result, $item);
+            array_push($result, $item);
+            //$result = array_merge($result, $item);
         }
 
         return $result;

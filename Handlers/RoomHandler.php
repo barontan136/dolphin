@@ -119,7 +119,7 @@ class RoomHandler
      */
     public function getRooms($oInput)
     {
-        $user_id  = $oInput->get('uid', '');     // 0：最新 1：热门 10：关注
+        $user_id  = $oInput->get('uid', '');     //
         $status  = $oInput->get('status', '0');     // 0：最新 1：热门 10：关注
         $tagId  = $oInput->get('tagId', '0');        // 0代表所有，其他代表相应tag
 
