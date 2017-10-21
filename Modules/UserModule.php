@@ -162,7 +162,7 @@ class UserModule
         do{
             $configModule = new ConfigModule();
             $now = date('Y-m-d H:i:s');
-            if ($user_id){
+            if (empty($user_id) || $user_id == ''){
                 $user_id = $this->userTable->genId();
             }
             //登录密码根据加密规则加密，存储数据库的是加密后的密文
