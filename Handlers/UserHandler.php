@@ -66,7 +66,7 @@ class UserHandler
         $errcode = '0';
         $response = [];
         try{
-            $sign_data = $this->userModule->getSignTypes();
+
 
         }catch(\Exception $e){
         }
@@ -234,7 +234,7 @@ class UserHandler
         $password = $oInput->get('password', '');       // 密码
         $plateform = $oInput->get('plateform', 0);      // 平台
         $source = $oInput->get('source', 0);            // 来源
-        $nickname = $oInput->get('userName', '');       // 昵称
+        $nickname = $oInput->get('nickname', '');       // 昵称
         $sex = $oInput->get('sex', 0);                  // 男女
 
         $response = [];
