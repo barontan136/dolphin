@@ -135,4 +135,39 @@ class RoomHandler
             $response
         );
     }
+
+
+    /**
+     * 验证主播权限
+     * @param object $oInput
+     * @return mixed|string
+     */
+    public function canLive($oInput){
+        $user_id  = $oInput->get('uid', '');     //
+        $status  = $oInput->get('accessToken', '0');     //
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $result = $this->userModule->getUserInfo($user_id);
+            if ($result == null || empty($result)){
+                $errcode = '999005';
+                break;
+            }
+            if (isset($result['verifiedID']) && $result['verifiedID'] != ''){
+                $response['canLive'] = 1;
+                $response['rid'] = $result['rid'];
+            }
+            elseif ($result['verifiedID'] == ''){
+                $response['canLive'] = 5;
+                $response['rid'] = '';
+            }
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
 }
