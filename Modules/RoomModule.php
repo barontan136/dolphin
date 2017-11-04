@@ -77,11 +77,12 @@ class RoomModule
             'headPic'           => $userInfo['headPic'],
             'verified'          => isset($userInfo['verified']) ? $userInfo['verified'] : '',
             'verifyInfo'        => isset($userInfo['verifyInfo']) ? $userInfo['verifyInfo'] : '',
-            'earnCoin'          => '',
+            'earnCoin'          => 0,
         );
 
         $result = array(
             'rid'               => $roomInfo['rid'],
+            'autoID'            => $roomInfo['autoID'],
             'msgIP'             => $roomInfo['msgIP'],
             'msgPort'           => $roomInfo['msgPort'],
             'videoPlayDomain'   => $roomInfo['videoPlayDomain'],
