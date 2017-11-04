@@ -39,7 +39,7 @@ class RoomHandler
         $errcode = '0';
         $response = [];
         do {
-            if(empty($user_id) || empty($title)){
+            if(empty($user_id) || empty($announcement)){
                 $errcode = "999005";
                 break;
             }
