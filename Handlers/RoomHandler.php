@@ -110,11 +110,12 @@ class RoomHandler
         $errcode = '0';
         $response = [];
         do {
-            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            // TODO
+           /* $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
             if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
                 $errcode = "999006";
                 break;
-            }
+            }*/
 
             $response = $this->roomModule->getRoomDetail($user_id, $room_id);
         } while(false);
