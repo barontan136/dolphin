@@ -162,7 +162,7 @@ class RoomHandler
      */
     public function canLive($oInput){
         $user_id  = $oInput->get('uid', '');     //
-        $status  = $oInput->get('accessToken', '0');     //
+        $accessToken  = $oInput->get('accessToken', '0');     //
 
         $errcode = '0';
         $response = [];

@@ -395,8 +395,8 @@ class UserModule
             'isPlaying' => $user_info['isPlaying'],
             'videoPlayUrl' => $user_info['videoPlayUrl'],
             'rid' => $user_info['rid'],
-            'verified' => isset($user_info['verified'])?$user_info['verified']:'',
-            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verified']:'',
+            'verifiedID' => isset($user_info['verified'])?$user_info['verified']:'',
+            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verifyInfo']:'',
             'flowerNumber' => $user_info['flowerNumber'],
         );
 
