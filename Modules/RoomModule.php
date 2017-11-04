@@ -103,7 +103,7 @@ class RoomModule
             'userType'          => $userInfo['type'],
             //
             'isGuard'           => 0,
-            'love'              => $love,
+            'loved'              => $love,
             'adminUids'         => $adminUids,
             'moderator'         => $moderator,
             'gifts'             => $giftList,
