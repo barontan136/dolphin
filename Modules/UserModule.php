@@ -131,6 +131,17 @@ class UserModule
     {
         return $this->userTable->createUser($user_data);
     }
+
+
+    /**
+     * 根据手机号码获取用户ID
+     * @param string $reg_mobile
+     * @return mixed
+     */
+    public function getUserIdByRegMobile($reg_mobile)
+    {
+        return $this->userCacheTable->getUserIdByUserName($reg_mobile);
+    }
     /**
      * 保存用户静态信息至Redis
      * @param string $user_id
@@ -140,6 +151,71 @@ class UserModule
     public function saveUserStaticToRedis($user_id, $user_data)
     {
         return $this->userCacheTable->setUserStaticCacheByUserId($user_id, $user_data);
+    }
+
+    /**
+     * 根据user_id获取用户静态信息
+     * @param $user_id
+     * @return mixed
+     */
+    public function getUserStaticByUserId($user_id)
+    {
+        return $this->userCacheTable->getUserStaticCacheByUserId($user_id);
+    }
+
+    /**
+     * 根据user_id获取用户动态信息
+     * @param string $user_id
+     * @return bool
+     */
+    public function getUserDynamicByUserId($user_id)
+    {
+        return $this->userCacheTable->getUserDynamicCacheByUserId($user_id);
+    }
+
+    /**
+     * 获取用户动态信息字段及其值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function getUserDynamicFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->getUserDynamicFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 删除用户动态信息字段及其值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function delUserDynamicFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->delUserDynamicFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 获取用户静态信息中的字段值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function getUserStaticFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->getUserStaticFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 更新用户静态信息中的字段值
+     * @param string $user_id
+     * @param string $field
+     * @param string $val
+     * @return bool
+     */
+    public function updateUserStaticFieldByUserId($user_id, $field, $val)
+    {
+        return $this->userCacheTable->setUserStaticFieldByUserId($user_id, $field, $val);
     }
 
 

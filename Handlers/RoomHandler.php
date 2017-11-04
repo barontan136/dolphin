@@ -30,14 +30,21 @@ class RoomHandler
      */
     public function updateAnnouncement($oInput){
 
-        $user_id  = $oInput->get('uid', ''); //设备惟一标识
-        $title  = $oInput->get('title', ''); //设备惟一标识
+        $user_id  = $oInput->get('uid', ''); //
+        $title  = $oInput->get('title', ''); //
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
         $response = [];
         do {
             if(empty($user_id) || empty($title)){
-                $errcode = "980001";
+                $errcode = "999005";
+                break;
+            }
+
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
+                $errcode = "999006";
                 break;
             }
             //
@@ -98,10 +105,17 @@ class RoomHandler
     {
         $user_id  = $oInput->get('uid', '');     // 进入房间的用户ID
         $room_id  = $oInput->get('rid', '');     // 房间ID
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
         $response = [];
         do {
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
+                $errcode = "999006";
+                break;
+            }
+
             $response = $this->roomModule->getRoomDetail($user_id, $room_id);
         } while(false);
 
