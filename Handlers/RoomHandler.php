@@ -31,7 +31,9 @@ class RoomHandler
     public function updateAnnouncement($oInput){
 
         $user_id  = $oInput->get('uid', ''); //
-        $title  = $oInput->get('title', ''); //
+        $location  = $oInput->get('location', ''); //
+        $announcement  = $oInput->get('announcement', ''); //
+        $tagIds  = $oInput->get('tagIds', ''); //
         $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
@@ -43,12 +45,13 @@ class RoomHandler
             }
 
             $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
-            if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
+            // TODO
+            /*if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
                 $errcode = "999006";
                 break;
-            }
+            }*/
             //
-            $ret = $this->userModule->updateUserAnnouncement($user_id, $title);
+            $ret = $this->userModule->updateUserAnnouncement($user_id, $announcement);
             if ($ret <= 0){
                 $errcode = "980002";
                 break;
