@@ -37,7 +37,13 @@ class RoomModule
         $roomTable = new RoomTable();
         $roomInfo = $roomTable->getRoomInfo(['rid' => $rid]);
 
-        return isset($roomInfo['videoPublishDomain']) ? $roomInfo['videoPublishDomain'] : '';
+        if (!isset($roomInfo['videoPublishDomain']) || $roomInfo['videoPublishDomain'] == ''){
+            return '';
+        }
+
+        // 获取鉴权后的推送URL
+        $path = $roomInfo['videoPublishDomain'] . Common::get_pulish_auth_key($rid);
+        return $path;
     }
 
     /**

@@ -31,6 +31,36 @@ class UserHandler
      * @param object $oInput
      * @return mixed|string
      */
+    public function getMyInfo($oInput)
+    {
+        $user_id  = $oInput->get('uid', ''); // 惟一标识
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
+                $response = $this->userModule->getUserInfo($user_id);
+            }
+            else{
+                $errcode = '999006';
+                break;
+            }
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+    /**
+     * 用户信息
+     * @param object $oInput
+     * @return mixed|string
+     */
     public function getUserInfo($oInput)
     {
         $user_id  = $oInput->get('uid', ''); // 惟一标识
