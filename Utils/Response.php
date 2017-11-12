@@ -107,7 +107,7 @@ class Response {
 			);
 
 		if ($cmd){
-			array_unshift($result, array('cmd'=>$cmd));
+            $result['cmd'] = sprintf('on%s', ucfirst($cmd));
 		}
 
 		if(!empty($data)) {

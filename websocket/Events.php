@@ -84,7 +84,7 @@ class Events
             $jRetStr = call_user_func_array(
                 array($hanlder, $cmd), array($oInput)
             );
-
+            $logger->info(sprintf('[output][onMessage] [%s]', Logging::json_pretty($jRetStr)));
             Gateway::sendToCurrentClient($jRetStr);
             if (in_array($cmd, $cmds_send_to_group) && ($room_id = $oInput->get('rid', 0)) > 0){
                 var_dump('send to group');
