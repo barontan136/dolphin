@@ -53,15 +53,15 @@ class Events
         $logger = Logging::getLogger();
         $logger->info(sprintf('[input][onMessage] [%s]', Logging::json_pretty($message_data)));
 
-        $module = trim($message_data['module']);     //模块名称
-        $cmd = trim($message_data['method']);        //方法名称
-        $params = $message_data['ras'];           //请求参数,DES_CBC加密
+//        $module = trim($message_data['module']);     //模块名称
+        $cmd = trim($message_data['cmd']);        //方法名称
+        $params = $message_data['data'];           //请求参数,DES_CBC加密
 //        $token = $message_data['token'];            //上次服务端返回给客户端的token
 //        $ver = $message_data['version'];              //客户端版本号
 //        $pla = intval($message_data['platform']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
 
         var_dump($message_data);
-        if (!isset($message_data['module']) && !isset($message_data['method']) && !isset($message_data['ras'])) {
+        if (!isset($message_data['cmd']) && !isset($message_data['data'])) {
             $aResult = array(
                 "errno" => "10003",
                 "msg" => "参数不完整"
