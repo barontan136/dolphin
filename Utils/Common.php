@@ -339,7 +339,7 @@ class Common
     }
 
     public static function getAction($method) {
-        return 'On' . strtoupper(substr($method, 0, 1)) . substr($method, 1);
+        return sprintf('on%s', ucfirst($method));
     }
 
 }

@@ -58,10 +58,10 @@ class WebsocketHandler
         } while(false);
 
         return Response::api_response(
-            Common::getAction(__FUNCTION__),
             $errcode,
             ErrMessage::$message[$errcode],
-            $response
+            $response,
+            Common::getAction(__FUNCTION__)
         );
     }
 
@@ -104,10 +104,10 @@ class WebsocketHandler
         } while(false);
 
         return Response::api_response(
-            Common::getAction(__FUNCTION__),
             $errcode,
             ErrMessage::$message[$errcode],
-            $response
+            $response,
+            Common::getAction(__FUNCTION__)
         );
     }
 
@@ -148,10 +148,10 @@ class WebsocketHandler
         } while(false);
 
         return Response::api_response(
-            Common::getAction(__FUNCTION__),
             $errcode,
             ErrMessage::$message[$errcode],
-            $response
+            $response,
+            Common::getAction(__FUNCTION__)
         );
     }
 
