@@ -5,6 +5,7 @@ use Config\KafkaConfig;
 use Config\Task as TaskConfig;
 use Config\GatewayConstants;
 use Config\GlobalConfig;
+use Modules\ConfigModule;
 use Utils\RedisClient;
 
 class Common
@@ -18,6 +19,24 @@ class Common
 		$url = 'http://apis.baidu.com/apistore/mobilenumber/mobilenumber?phone=' . $mobile;
 		return self::execute_baidu_api($url);
 	}
+
+    /**
+     *  获取阿里云直播的推送鉴权码
+     * @param $mobile
+     * */
+	public static function get_pulish_auth_key($rid){
+
+        // 直播推流地址鉴权操作
+        $configModule = new ConfigModule();
+        $appName = $configModule->getValByKeyName('stream_app_name','xiawaNormal');
+        $authKey = $configModule->getValByKeyName('domain_publish_auth_key','xiawa0903');
+        //
+        $authPath = '/' . $appName . '/'. $rid;
+        $timeStamp = time() + 1800;
+        $stringToAuth = $authPath . '-' . $timeStamp . '-0-0-' .$authKey;
+
+        return  '&auth_key=' .$timeStamp . '-0-0-' . md5($stringToAuth) ;
+    }
 
     /**
      *  调用百度API

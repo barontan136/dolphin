@@ -37,7 +37,13 @@ class RoomModule
         $roomTable = new RoomTable();
         $roomInfo = $roomTable->getRoomInfo(['rid' => $rid]);
 
-        return isset($roomInfo['videoPublishDomain']) ? $roomInfo['videoPublishDomain'] : '';
+        if (!isset($roomInfo['videoPublishDomain']) || $roomInfo['videoPublishDomain'] == ''){
+            return '';
+        }
+
+        // 获取鉴权后的推送URL
+        $path = $roomInfo['videoPublishDomain'] . Common::get_pulish_auth_key($rid);
+        return $path;
     }
 
     /**
@@ -77,11 +83,12 @@ class RoomModule
             'headPic'           => $userInfo['headPic'],
             'verified'          => isset($userInfo['verified']) ? $userInfo['verified'] : '',
             'verifyInfo'        => isset($userInfo['verifyInfo']) ? $userInfo['verifyInfo'] : '',
-            'earnCoin'          => '',
+            'earnCoin'          => 0,
         );
 
         $result = array(
             'rid'               => $roomInfo['rid'],
+            'autoID'            => $roomInfo['autoID'],
             'msgIP'             => $roomInfo['msgIP'],
             'msgPort'           => $roomInfo['msgPort'],
             'videoPlayDomain'   => $roomInfo['videoPlayDomain'],
@@ -102,7 +109,7 @@ class RoomModule
             'userType'          => $userInfo['type'],
             //
             'isGuard'           => 0,
-            'love'              => $love,
+            'loved'              => $love ? 'true' : 'false',
             'adminUids'         => $adminUids,
             'moderator'         => $moderator,
             'gifts'             => $giftList,

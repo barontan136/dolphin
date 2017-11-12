@@ -31,19 +31,52 @@ class UserHandler
      * @param object $oInput
      * @return mixed|string
      */
-    public function getUserInfo($oInput)
+    public function getMyInfo($oInput)
     {
-        $user_id  = $oInput->get('uid', ''); //设备惟一标识
+        $user_id  = $oInput->get('uid', ''); // 惟一标识
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
         $response = [];
         do {
-            $result = $this->userModule->getUserInfo($user_id);
-            if ($result == null){
-                $errcode = '999002';
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
+                $response = $this->userModule->getUserInfo($user_id);
+            }
+            else{
+                $errcode = '999006';
                 break;
             }
-            $response = $result;
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+    /**
+     * 用户信息
+     * @param object $oInput
+     * @return mixed|string
+     */
+    public function getUserInfo($oInput)
+    {
+        $user_id  = $oInput->get('uid', ''); // 惟一标识
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
+                $response = $this->userModule->getUserInfo($user_id);
+            }
+            else{
+                $errcode = '999006';
+                break;
+            }
         } while(false);
 
         return Response::api_response(
@@ -62,14 +95,44 @@ class UserHandler
 
         $mobile  = $oInput->get('mobile', '');       // 用户手机号
         $password  = $oInput->get('password', '');    // 用户密码
+        $plateform = $oInput->get('plateform', 0);      // 平台
+        $device_id = $oInput->get('deviceName', '11223344');      // 设备ID
+        $client_ip = $oInput->get('client_ip', '');      // 客户端IP
 
         $errcode = '0';
         $response = [];
-        try{
-            $sign_data = $this->userModule->getSignTypes();
+        do {
+            // 检查用户是否存在
+            $user_id = $this->userModule->getUserIdByRegMobile($mobile);
+            if ($user_id) {
+                $user = $this->userModule->getUserStaticByUserId($user_id);
+                if ($user && isset($user['password'])) {
 
-        }catch(\Exception $e){
-        }
+                    if ($password == $user['password']) {
+                        //每次登录都重新生成access_token
+                        $access_token = $this->token->createAccessToken($user_id, $device_id, intval($plateform));
+//                        $this->userModule->updateUserLoginInfo($user_id, $plateform, $client_ip);
+
+                        $user_data = array(
+                            'uid'      => $user_id,
+                            'nickname'    => $user['nickname'],
+                            'regMobile'   => $user['regMobile'],
+                            'accessToken' => $access_token,
+                        );
+                        return Response::api_response('000000', ErrMessage::$message['000000'], $user_data);
+                    } else {
+                        //密码验证失败
+                        return Response::api_response('999905', ErrMessage::$message['999905']);
+                    }
+                } else {
+                    //缓存数据异常
+                    $errcode = '998003';
+                }
+            } else {
+                //用户不存在
+                $errcode = '998003';
+            }
+        }while(0);
 
         return Response::api_response(
             $errcode,
@@ -208,7 +271,7 @@ class UserHandler
             // 表示登录或者绑定，刷新access_token，并返回
             // 每次登录都重新生成access_token
             $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
-            $response['access_token'] = $access_token;
+            $response['accessToken'] = $access_token;
         }
         elseif (empty($user_info)){
             // 新增用户,手机号为mobile
@@ -219,7 +282,7 @@ class UserHandler
                 // TODO
             }
         }
-        $response['user_id'] = $user_id;
+        $response['uid'] = $user_id;
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode], $response);
     }
@@ -234,6 +297,8 @@ class UserHandler
         $password = $oInput->get('password', '');       // 密码
         $plateform = $oInput->get('plateform', 0);      // 平台
         $source = $oInput->get('source', 0);            // 来源
+        $nickname = $oInput->get('nickname', '');       // 昵称
+        $sex = $oInput->get('sex', 0);                  // 男女
 
         $response = [];
         $errcode = '0';
@@ -244,14 +309,24 @@ class UserHandler
                 $errcode = '999001';
                 break;
             }
+
+            // 检查用户是否存在
+            $user_info = $this->userModule->getUserInfoByMobile($user_data_ready['regMobile']);
+            if ($user_info){
+                $errcode = '998002';
+                break;
+            }
+
             // 新增用户,手机号为mobile,
             try {
                 // 手机号注册逻辑
                 $user_data = $this->userModule->registerByMobile(
+                    $nickname,
                     $user_data_ready['regMobile'],
                     $source,
                     $user_data_ready['deviceNum'],
                     $password,
+                    $sex,
                     $user_id
                 );
             } catch (\Exception $e) {
@@ -263,10 +338,9 @@ class UserHandler
                 $user_data['deviceNum'],
                 $plateform
             );
-
         }while(0);
-        $response['access_token'] = $access_token;
-        $response['user_id'] = $user_id;
+        $response['accessToken'] = $access_token;
+        $response['uid'] = $user_id;
 
         return Response::api_response($errcode, ErrMessage::$message[$errcode], $response);
     }

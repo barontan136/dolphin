@@ -30,18 +30,28 @@ class RoomHandler
      */
     public function updateAnnouncement($oInput){
 
-        $user_id  = $oInput->get('uid', ''); //设备惟一标识
-        $title  = $oInput->get('title', ''); //设备惟一标识
+        $user_id  = $oInput->get('uid', ''); //
+        $location  = $oInput->get('location', ''); //
+        $announcement  = $oInput->get('announcement', ''); //
+        $tagIds  = $oInput->get('tagIds', ''); //
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
         $response = [];
         do {
-            if(empty($user_id) || empty($title)){
-                $errcode = "980001";
+            if(empty($user_id)){
+                $errcode = "999005";
                 break;
             }
+
+            $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            // TODO
+            /*if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
+                $errcode = "999006";
+                break;
+            }*/
             //
-            $ret = $this->userModule->updateUserAnnouncement($user_id, $title);
+            $ret = $this->userModule->updateUserAnnouncement($user_id, $announcement);
             if ($ret <= 0){
                 $errcode = "980002";
                 break;
@@ -98,10 +108,18 @@ class RoomHandler
     {
         $user_id  = $oInput->get('uid', '');     // 进入房间的用户ID
         $room_id  = $oInput->get('rid', '');     // 房间ID
+        $access_token  = $oInput->get('accessToken', ''); // 验证登录信息
 
         $errcode = '0';
         $response = [];
         do {
+            // TODO
+           /* $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
+            if (!isset($dynamic['accessToken']) || $access_token != $dynamic['accessToken']) {
+                $errcode = "999006";
+                break;
+            }*/
+
             $response = $this->roomModule->getRoomDetail($user_id, $room_id);
         } while(false);
 
@@ -119,7 +137,7 @@ class RoomHandler
      */
     public function getRooms($oInput)
     {
-        $user_id  = $oInput->get('uid', '');     // 0：最新 1：热门 10：关注
+        $user_id  = $oInput->get('uid', '');     //
         $status  = $oInput->get('status', '0');     // 0：最新 1：热门 10：关注
         $tagId  = $oInput->get('tagId', '0');        // 0代表所有，其他代表相应tag
 
@@ -127,6 +145,41 @@ class RoomHandler
         $response = [];
         do {
             $response = $this->userModule->getModerators($user_id, $status, $tagId);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+    }
+
+
+    /**
+     * 验证主播权限
+     * @param object $oInput
+     * @return mixed|string
+     */
+    public function canLive($oInput){
+        $user_id  = $oInput->get('uid', '');     //
+        $accessToken  = $oInput->get('accessToken', '0');     //
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $result = $this->userModule->getUserInfo($user_id);
+            if ($result == null || empty($result)){
+                $errcode = '999005';
+                break;
+            }
+            if (isset($result['verifiedID']) && $result['verifiedID'] != ''){
+                $response['canLive'] = 1;
+                $response['rid'] = $result['rid'];
+            }
+            elseif ($result['verifiedID'] == ''){
+                $response['canLive'] = 5;
+                $response['rid'] = '';
+            }
         } while(false);
 
         return Response::api_response(

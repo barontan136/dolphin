@@ -34,7 +34,8 @@ class UserModule
      * @return mixed
      */
     public function setReadyUserData($reg_mobile, $dev_num){
-        $user_id = $this->userTable->genId();
+        // TODO
+        $user_id = '55c08ce07a88e59eaead9a009f9999';//$this->userTable->genId();
         $user_data = array(
             'user_id' => $user_id,
             'name' => $reg_mobile,
@@ -130,6 +131,17 @@ class UserModule
     {
         return $this->userTable->createUser($user_data);
     }
+
+
+    /**
+     * 根据手机号码获取用户ID
+     * @param string $reg_mobile
+     * @return mixed
+     */
+    public function getUserIdByRegMobile($reg_mobile)
+    {
+        return $this->userCacheTable->getUserIdByUserName($reg_mobile);
+    }
     /**
      * 保存用户静态信息至Redis
      * @param string $user_id
@@ -141,6 +153,71 @@ class UserModule
         return $this->userCacheTable->setUserStaticCacheByUserId($user_id, $user_data);
     }
 
+    /**
+     * 根据user_id获取用户静态信息
+     * @param $user_id
+     * @return mixed
+     */
+    public function getUserStaticByUserId($user_id)
+    {
+        return $this->userCacheTable->getUserStaticCacheByUserId($user_id);
+    }
+
+    /**
+     * 根据user_id获取用户动态信息
+     * @param string $user_id
+     * @return bool
+     */
+    public function getUserDynamicByUserId($user_id)
+    {
+        return $this->userCacheTable->getUserDynamicCacheByUserId($user_id);
+    }
+
+    /**
+     * 获取用户动态信息字段及其值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function getUserDynamicFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->getUserDynamicFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 删除用户动态信息字段及其值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function delUserDynamicFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->delUserDynamicFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 获取用户静态信息中的字段值
+     * @param string $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function getUserStaticFieldByUserId($user_id, $field)
+    {
+        return $this->userCacheTable->getUserStaticFieldByUserId($user_id, $field);
+    }
+
+    /**
+     * 更新用户静态信息中的字段值
+     * @param string $user_id
+     * @param string $field
+     * @param string $val
+     * @return bool
+     */
+    public function updateUserStaticFieldByUserId($user_id, $field, $val)
+    {
+        return $this->userCacheTable->setUserStaticFieldByUserId($user_id, $field, $val);
+    }
+
 
     /**
      * 获取用户注册信息
@@ -149,24 +226,28 @@ class UserModule
      * @return mixed
      */
     public function registerByMobile(
+        $nickname,
         $regMobile,
         $source,
         $deviceNum,
         $password,
+        $sex,
         $user_id = ''
     )
     {
         do{
             $configModule = new ConfigModule();
             $now = date('Y-m-d H:i:s');
-            if ($user_id){
+            if (empty($user_id) || $user_id == ''){
                 $user_id = $this->userTable->genId();
             }
             //登录密码根据加密规则加密，存储数据库的是加密后的密文
 //            $pwd_md5 = md5(md5($password) . $salt);
             $user_data = array(
                 'uid'          => $user_id,
-                'nickname'     => $regMobile,
+                'userName'     => $regMobile,
+                'nickname'     => $nickname,
+                'sex'          => $sex,
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
                 'password'     => $password,
@@ -313,9 +394,9 @@ class UserModule
             'moderatorNextLevelNeedCoin' => $user_info['moderatorNextLevelNeedCoin'],
             'isPlaying'    => $user_info['isPlaying'],
             'videoPlayUrl' => $user_info['videoPlayUrl'],
-            'rid'          => $user_info['rid'],
-            'verified'     => isset($user_info['verified'])?$user_info['verified']:'',
-            'verifyInfo'   => isset($user_info['verifyInfo'])?$user_info['verified']:'',
+            'rid' => $user_info['rid'],
+            'verifiedID' => isset($user_info['verifiedID'])?$user_info['verifiedID']:'',
+            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verifyInfo']:'',
             'flowerNumber' => $user_info['flowerNumber'],
             'guardType'    => $user_info['guardType'],
             'lowkeyEnter'  => $user_info['lowkeyEnter'],
@@ -406,12 +487,12 @@ class UserModule
             if (isset($item['rid']) && !empty($item['rid'])) {
 
                 $roomInfo = $roomTable->getRoomInfo(['rid'=>$item['rid']]);
-                $item['onlineNum'] = $roomInfo['onlineNum'];
-                $item['playStartTime'] = $roomInfo['lastStartTime'];
+                $item['onlineNum'] = intval($roomInfo['onlineNum']);
+                $item['playStartTime'] = !empty($roomInfo['lastStartTime']) ? strtotime($roomInfo['lastStartTime']) : time();
             }
 
-            array_push($result, $item)
-            $result = array_merge($result, $item);
+            array_push($result, $item);
+            //$result = array_merge($result, $item);
         }
 
         return $result;
