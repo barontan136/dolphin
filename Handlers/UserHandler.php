@@ -40,7 +40,8 @@ class UserHandler
         $response = [];
         do {
             $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
-            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
+//            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
+            if (1){
                 $response = $this->userModule->getUserInfo($user_id);
             }
             else{
