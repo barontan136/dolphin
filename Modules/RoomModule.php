@@ -1,6 +1,7 @@
 <?php
 namespace Modules;
 
+use Config\Rtmp;
 use Tables\Room\GiftTable;
 use Tables\Room\RoomAdminTable;
 use Tables\Room\RoomTable;
@@ -40,9 +41,11 @@ class RoomModule
         if (!isset($roomInfo['videoPublishDomain']) || $roomInfo['videoPublishDomain'] == ''){
             return '';
         }
-
-        // 获取鉴权后的推送URL
-        $path = $roomInfo['videoPublishDomain'] . Common::get_pulish_auth_key($rid);
+        $txTime = date("Y-m-d H:i:s", strtotime("+1 day"));
+        $path = Common::get_push_url(Rtmp::$tx_biz_id, $rid, Rtmp::$tx_push_key, $txTime);
+//
+//        // 获取鉴权后的推送URL
+//        $path = $roomInfo['videoPublishDomain'] . Common::get_pulish_auth_key($rid);
         return $path;
     }
 
@@ -94,8 +97,8 @@ class RoomModule
             'videoPlayDomain'   => $roomInfo['videoPlayDomain'],
             'videoPublishDomain'=> $roomInfo['videoPublishDomain'],
             'videoPath'         => $roomInfo['videoPath'],
-            'videoStreamName'   => $roomInfo['videoStreamName'],
-            'videoPlayUrl'      => $roomInfo['videoPlayUrl'],
+            'videoStreamName'   => Common::get_play_url(Rtmp::$tx_biz_id, $roomInfo['rid']),
+            'videoPlayUrl'      => Common::get_play_url(Rtmp::$tx_biz_id, $roomInfo['rid']),
             'flowerNumber'      => $roomInfo['flowerNumber'],
             'isPlaying'         => $roomInfo['isPlaying'],
             'onlineNum'         => $roomInfo['onlineNum'],

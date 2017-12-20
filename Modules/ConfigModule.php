@@ -7,6 +7,7 @@
  */
 namespace Modules;
 
+use Config\Rtmp;
 use Utils\Common;
 use Tables\Config\ConfigTable;
 //use Tables\Deposit\WebConfigTable;
@@ -96,10 +97,13 @@ class ConfigModule
      */
     public function getUserPlayDomain($roomID){
 
+        return Common::get_play_url(Rtmp::$tx_biz_id, $roomID);
+        /*
         return sprintf(
             $this->getValByKeyName('root_domain_publish',"rtmp://video-center.alivecdn.com/%s/%s?vhost=push.szxiawa.com"),
             $this->getValByKeyName('stream_app_name','xiawaNormal'),
             $roomID);
+        */
     }
 
 }
