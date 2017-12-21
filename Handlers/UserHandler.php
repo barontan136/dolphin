@@ -103,6 +103,13 @@ class UserHandler
         $errcode = '0';
         $response = [];
 
+        $user_id = $this->userModule->getUserIdByRegMobile($mobile);
+        $response = array(
+            'uid'      => $user_id,
+            'nickname'    => 'nickname',
+            'regMobile'   => $mobile,
+            'accessToken' => 'ddd',
+        );
         return Response::api_response(
             $errcode,
             ErrMessage::$message[$errcode],
