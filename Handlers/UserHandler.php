@@ -95,6 +95,7 @@ class UserHandler
     public function login($oInput){
 
         $mobile  = $oInput->get('mobile', '');       // 用户手机号
+        $mobile  = $oInput->get('username', '');       // 用户手机号
         $password  = $oInput->get('password', '');    // 用户密码
         $plateform = $oInput->get('plateform', 0);      // 平台
         $device_id = $oInput->get('deviceName', '11223344');      // 设备ID
