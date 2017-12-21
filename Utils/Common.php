@@ -28,7 +28,7 @@ class Common
      *        key 安全密钥
      *        time 过期时间 sample 2016-11-12 12:00:00
      * @return String url */
-    function get_push_url($bizId, $streamId, $key = null, $time = null){
+    public static function get_push_url($bizId, $streamId, $key = null, $time = null){
 
         if($key && $time){
             $txTime = strtoupper(base_convert(strtotime($time),10,16));
@@ -50,7 +50,7 @@ class Common
      * @param bizId 您在腾讯云分配到的bizid
      *        streamId 您用来区别不同推流地址的唯一id
      * @return String url */
-    function get_play_url($bizId, $streamId){
+    public static function get_play_url($bizId, $streamId){
         $livecode = $bizId."_".$streamId; //直播码
 
         return "rtmp://".$bizId.".liveplay.myqcloud.com/live/".$livecode;
