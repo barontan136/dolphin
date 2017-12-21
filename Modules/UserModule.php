@@ -140,7 +140,8 @@ class UserModule
      */
     public function getUserIdByRegMobile($reg_mobile)
     {
-        return $this->userCacheTable->getUserIdByUserName($reg_mobile);
+        return $this->userTable->getUserInfoByMoible($reg_mobile, 'uid');
+//        return $this->userCacheTable->getUserIdByUserName($reg_mobile);
     }
     /**
      * 保存用户静态信息至Redis

@@ -102,6 +102,13 @@ class UserHandler
 
         $errcode = '0';
         $response = [];
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response
+        );
+
         do {
             // 检查用户是否存在
             $user_id = $this->userModule->getUserIdByRegMobile($mobile);
