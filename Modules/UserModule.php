@@ -36,6 +36,7 @@ class UserModule
     public function setReadyUserData($reg_mobile, $dev_num){
         // TODO
         $user_id = '55c08ce07a88e59eaead9a009f9999';//$this->userTable->genId();
+        $user_id = $this->userTable->genId();
         $user_data = array(
             'user_id' => $user_id,
             'name' => $reg_mobile,

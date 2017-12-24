@@ -289,12 +289,13 @@ class UserHandler
             $access_token = $this->token->createAccessToken($user_id, $device_id, 0);
             $response['accessToken'] = $access_token;
         }
-        elseif (empty($user_info)){
+        elseif (!isset($user_info['uid'])){
             // 新增用户,手机号为mobile
             try{
                 // 手机号注册逻辑
                 $user_id = $this->userModule->setReadyUserData($mobile, $device_id);
             }catch(\Exception $e){
+                var_dump($e->getMessage());
                 // TODO
             }
         }
