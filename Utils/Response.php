@@ -110,6 +110,7 @@ class Response {
             $result['cmd'] = $cmd;
 		}
 
+        $result['data'] = self::type_conversion($data);
 //		if(!empty($data)) {
 //			$result['data'] = self::type_conversion($data);
 //		}
