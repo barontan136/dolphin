@@ -109,9 +109,9 @@ class UserHandler
             $user_id = $this->userModule->getUserIdByRegMobile($mobile);
             if ($user_id) {
                 $user = $this->userModule->getUserStaticByUserId($user_id);
-                if ($user && isset($user['password'])) {
+                if ($user && isset($user['login_pwd'])) {
 
-                    if ($password == $user['password']) {
+                    if ($password == $user['login_pwd']) {
                         //每次登录都重新生成access_token
                         $access_token = $this->token->createAccessToken($user_id, $device_id, intval($plateform));
 //                        $this->userModule->updateUserLoginInfo($user_id, $plateform, $client_ip);

@@ -243,8 +243,9 @@ class UserModule
             if (empty($user_id) || $user_id == ''){
                 $user_id = $this->userTable->genId();
             }
+            $salt = '1234';
             //登录密码根据加密规则加密，存储数据库的是加密后的密文
-//            $pwd_md5 = md5(md5($password) . $salt);
+            $pwd_md5 = md5($password . $salt);
             $user_data = array(
                 'uid'          => $user_id,
                 'userName'     => $regMobile,
@@ -252,7 +253,7 @@ class UserModule
                 'sex'          => $sex,
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
-                'password'     => $password,
+                'password'     => $pwd_md5,
                 'salt'         => '0000',
                 'deviceNum'    => $deviceNum,
                 'source'       => $source,
@@ -269,6 +270,7 @@ class UserModule
                 'name'       => $regMobile,
                 'regMobile' => $regMobile,
                 'deviceNum'  => $deviceNum,
+                'login_pwd'  => $pwd_md5,
                 'type'     => 1,
                 'status'     => 1,
             ));
