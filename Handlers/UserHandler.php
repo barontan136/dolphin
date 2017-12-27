@@ -129,7 +129,7 @@ class UserHandler
                     }
                 } else {
                     //缓存数据异常
-                    $errcode = '998003';
+                    $errcode = '998004';
                 }
             } else {
                 //用户不存在

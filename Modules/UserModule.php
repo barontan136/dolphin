@@ -254,7 +254,7 @@ class UserModule
                 'regMobile'    => $regMobile,
                 'regTime'      => $now,
                 'password'     => $pwd_md5,
-                'salt'         => '0000',
+                'salt'         => $salt,
                 'deviceNum'    => $deviceNum,
                 'source'       => $source,
                 'type'         => 1,
