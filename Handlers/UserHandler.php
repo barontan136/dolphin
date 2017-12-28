@@ -122,7 +122,7 @@ class UserHandler
                             'regMobile'   => $user['regMobile'],
                             'accessToken' => $access_token,
                         );
-                        return Response::api_response('000000', ErrMessage::$message['000000'], $user_data);
+                        return Response::api_response($errcode, ErrMessage::$message[$errcode], $user_data);
                     } else {
                         //密码验证失败
                         return Response::api_response('999905', ErrMessage::$message['999905']);
