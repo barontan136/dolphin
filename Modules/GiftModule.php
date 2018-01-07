@@ -24,7 +24,7 @@ class GiftModule
      * @param $gift_id
      * @return mixed
      */
-    public function getGiftInfoById($gift_id)
+    public function  getGiftInfoById($gift_id)
     {
         return $this->giftTable->findByPk($gift_id);
     }

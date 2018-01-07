@@ -12,7 +12,7 @@ class GiftTable extends RoomBase
     {
         $this->setPrefix("lz_");
         $this->setTable('gifts');
-        $this->setPk('giftID');
+        $this->setPk('gid');
         $this->setTableInId(98);
         parent::__construct();
     }

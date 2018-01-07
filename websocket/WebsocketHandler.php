@@ -139,7 +139,7 @@ class WebsocketHandler
                 'fromLevel'     => $user_info['level'],
                 'fromType'      => $user_info['type'],
                 'fromHeadPic'   => $user_info['headPic'],
-                'pid'           => $gift_info['id'],
+                'pid'           => $gift_info['gid'],
                 'num'           => $p_num,
                 'cost'          => $gift_info['price'],
                 'giftPic'       => $gift_info['img'],
