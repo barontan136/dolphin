@@ -25,7 +25,7 @@ class WebsocketHandler
     }
 
     /**
-     * 用户登录
+     * 进入直播间
      * @param object $oInput
      * @return mixed|string
      */
@@ -78,15 +78,18 @@ class WebsocketHandler
         $to_user_id  = $oInput->get('toUid ', '');        // 发送消息的对象
         $msg         = $oInput->get('msg  ', '');         // 消息内容
 
-        // 登陆时保存的room_id
-        $back_room_id = $_SESSION['room_id'];
-        if ($back_room_id != $room_id){
-            var_dump('room is not same, check it~');
-        }
-
         $errcode = '0';
         $response = [];
         do {
+
+            // 登陆时保存的room_id
+            $back_room_id = $_SESSION['room_id'];
+            if ($back_room_id != $room_id){
+                var_dump('room is not same, check it');
+                $errcode = '997001';
+                break;
+            }
+
             $user_info = $this->user->getUserInfo($user_id);
             $to_user_info = $this->user->getUserInfo($to_user_id);
             $response = [
