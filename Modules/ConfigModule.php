@@ -84,11 +84,11 @@ class ConfigModule
      * @return string
      */
     public function getUserpublishDomain($roomID){
-
-        return sprintf(
-            $this->getValByKeyName('root_domain_play',"rtmp://push.szxiawa.com/%s/%s?auth_key="),
-            $this->getValByKeyName('stream_app_name','xiawaNormal'),
-            $roomID);
+        return Common::get_push_url(Rtmp::$tx_biz_id, $roomID);
+//        return sprintf(
+//            $this->getValByKeyName('root_domain_play',"rtmp://push.szxiawa.com/%s/%s?auth_key="),
+//            $this->getValByKeyName('stream_app_name','xiawaNormal'),
+//            $roomID);
     }
     /**
      * 获取主播发布/推送地址
