@@ -97,7 +97,8 @@ class ConfigModule
      */
     public function getUserPlayDomain($roomID){
 
-        return Common::get_play_url(Rtmp::$tx_biz_id, $roomID);
+        $txTime = date("Y-m-d H:i:s", strtotime("+1 day"));
+        return Common::get_push_url(Rtmp::$tx_biz_id, $roomID, Rtmp::$tx_push_key, $txTime);
         /*
         return sprintf(
             $this->getValByKeyName('root_domain_publish',"rtmp://video-center.alivecdn.com/%s/%s?vhost=push.szxiawa.com"),
