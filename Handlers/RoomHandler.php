@@ -177,8 +177,16 @@ class RoomHandler
                 $response['rid'] = $result['rid'];
             }
             elseif ($result['verifiedID'] == ''){
-                $response['canLive'] = 5;
-                $response['rid'] = '';
+                // 更新该用户为实名认证用户,主播用户,并创建房间等信息
+                $auth_info = 'system auto auth';
+                $userModule = new UserModule();
+                $ret = $userModule->setUserToModerator($user_id, $auth_info);
+                if ($ret && !empty($ret)){
+                    $response['canLive'] = 1;
+                    $response['rid'] = isset($ret['rid'])? $ret['rid'] : '';
+                }
+//                $response['canLive'] = 5;
+//                $response['rid'] = '';
             }
         } while(false);
 

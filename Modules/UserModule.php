@@ -285,18 +285,19 @@ class UserModule
      * 获取用户注册信息
      * @param string $user_id
      * @param string | array $fields
+     * @param string $mid 主播编号
      * @return mixed
      */
-    public function setUserToModerator($user_id, $auth_info)
+    public function setUserToModerator($user_id, $auth_info, $mid = '')
     {
-        $mid = 1234567;         // 主播编号
-
+        $data = array();
         try{
             $medoo = $this->userTable->getDb();
             $medoo->action(function($database) use(
                 $user_id,
                 $auth_info,
-                $mid
+                $mid,
+                &$data
             ) {
                 $date_now = date('Y-m-d H:i:s');
                 $configModule = new ConfigModule();
@@ -346,6 +347,10 @@ class UserModule
                     'updateDatetime' => $date_now,
                 );
                 $this->userTable->updateByPk($user_data, $user_id);
+
+                $data = array(
+                    'rid' => $roomID,
+                );
             });
         }catch(\Exception $e){
             $this->log->error(sprintf(
@@ -356,7 +361,7 @@ class UserModule
             return false;
         }
 
-        return true;
+        return $data;
     }
 
 
