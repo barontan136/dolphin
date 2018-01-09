@@ -41,7 +41,7 @@ class RoomModule
         if (!isset($roomInfo['videoPublishDomain']) || $roomInfo['videoPublishDomain'] == ''){
             return '';
         }
-        $txTime = date("Y-m-d") . " 23:59:39";
+        $txTime = date("Y-m-d") . " 23:59:59";
         $path = Common::get_push_url(Rtmp::$tx_biz_id, $rid, Rtmp::$tx_push_key, $txTime);
 //
 //        // 获取鉴权后的推送URL
