@@ -80,7 +80,7 @@ class RoomModule
                 'height' => 0,
                 'age' => 0,
                 'trueName' => isset($userInfo['realName']) ?? '',
-                'nickname' => isset($userInfo['nickname']) ?? '',
+                'nickname' => isset($userInfo['nickname']) ? $userInfo['nickname'] : '',
                 'id' => isset($userInfo['mid']) ?? '',
                 'moderatorLevel' => isset($userInfo['moderatorLevel']) ?? '',
                 'nextLevelNeed' => isset($userInfo['moderatorNextLevelNeedCoin']) ?? '',
