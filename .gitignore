@@ -10,6 +10,7 @@ Config/Task.php
 Config/Redis.php
 Config/NotifyConstants.php
 Config/GatewayConstants.php
+Config/WebSocket.php
 test
 Gateway/logs
 GPATH
