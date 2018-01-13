@@ -72,18 +72,26 @@ class Events
 //        $pla = intval($message_data['platform']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
 
         // 需要广播发送到房间的接口列表
-        $cmds_send_to_group = array(
-            '0' => 'login',
-            '1' => 'sendMsg',
-            '2' => 'sendGift'
-        );
+        $cmds_send_to_group = \Config\GatewayConstants::BROADCAST_GROUP;
 
         // 调用相应的socket方法
         $hanlder = new WebsocketHandler();
         if (method_exists($hanlder, $cmd)) {
+            if(!isset($_SESSION['uid']) || !isset($_SESSION['room_id'])) {
+                // 消息类型不是登录视为非法请求，关闭连接
+                if($cmd !== 'login') {
+                    return Gateway::closeClient($client_id);
+                }
+                // 设置session，标记该客户端已经登录
+                $_SESSION['uid'] = $params['uid'];
+                $_SESSION['rid'] = $params['rid'];
+            }
+
             $oInput = new WorkerInput($params, $cmd);
-            $room_id = $oInput->get('rid', 0);
+//            $room_id = $oInput->get('rid', $_SESSION['room_id']);
             $oInput->set('client_id', $client_id);
+            $oInput->set('uid', $_SESSION['uid']);
+            $oInput->set('rid', $_SESSION['rid']);
             $jRetStr = call_user_func_array(
                 array($hanlder, $cmd), array($oInput)
             );

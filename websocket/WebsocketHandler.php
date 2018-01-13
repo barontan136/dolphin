@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 
 use \GatewayWorker\Lib\Gateway;
 use Modules\GiftModule;
+use Modules\RoomModule;
 use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
@@ -52,7 +53,6 @@ class WebsocketHandler
             ];
 
             Gateway::joinGroup($client_id, $room_id);
-            $_SESSION['room_id'] = $room_id;
             $_SESSION['client_name'] = $user_info['regMobile'];
 
         } while(false);
@@ -158,5 +158,32 @@ class WebsocketHandler
         );
     }
 
+    /**
+     * 主播上报直播开始
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function videoPublish($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+        $autoRetry  = $oInput->get('autoRetry', '');
 
+        $errcode = '0';
+        $response = [];
+        do {
+            $roomModule = new RoomModule();
+            $result = $roomModule->getRoomDetail($user_id, $room_id);
+            $response = [
+                'videoPlayUrl' => $result['videoPlayUrl']
+            ];
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
 }
