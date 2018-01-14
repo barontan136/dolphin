@@ -322,6 +322,8 @@ class UserModule
                     'uid' => $user_id,
                     'videoPlayDomain' => $configModule->getUserPlayDomain($roomID),
                     'videoPublishDomain' => $configModule->getUserpublishDomain($roomID),
+                    'msgIP' => $configModule->getValByKeyName('websocket_ip', 'ws://api.szxiawa.com'),
+                    'msgPort' => $configModule->getValByKeyName('websocket_port', 'ws://api.szxiawa.com'),
                     'videoPath' => '',
                     'videoStreamName' => '',
                     'videoPlayUrl' => $configModule->getUserPlayDomain($roomID),
@@ -409,6 +411,7 @@ class UserModule
             'flowerNumber' => $user_info['flowerNumber'],
             'guardType'    => $user_info['guardType'],
             'lowkeyEnter'  => $user_info['lowkeyEnter'],
+            'regMobile'    => $user_info['regMobile'],
         );
 
         return $ret_data;

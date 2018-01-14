@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 
 use \GatewayWorker\Lib\Gateway;
 use Modules\GiftModule;
+use Modules\RoomModule;
 use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
@@ -52,7 +53,6 @@ class WebsocketHandler
             ];
 
             Gateway::joinGroup($client_id, $room_id);
-            $_SESSION['room_id'] = $room_id;
             $_SESSION['client_name'] = $user_info['regMobile'];
 
         } while(false);
@@ -81,14 +81,6 @@ class WebsocketHandler
         $errcode = '0';
         $response = [];
         do {
-
-            // 登陆时保存的room_id
-            $back_room_id = $_SESSION['room_id'];
-            if ($back_room_id != $room_id){
-                var_dump('room is not same, check it');
-                $errcode = '997001';
-                break;
-            }
 
             $user_info = $this->user->getUserInfo($user_id);
             $to_user_info = $this->user->getUserInfo($to_user_id);
@@ -158,5 +150,32 @@ class WebsocketHandler
         );
     }
 
+    /**
+     * 主播上报直播开始
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function videoPublish($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+        $autoRetry  = $oInput->get('autoRetry', '');
 
+        $errcode = '0';
+        $response = [];
+        do {
+            $roomModule = new RoomModule();
+            $result = $roomModule->getRoomDetail($user_id, $room_id);
+            $response = [
+                'videoPlayUrl' => $result['videoPlayUrl']
+            ];
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
 }

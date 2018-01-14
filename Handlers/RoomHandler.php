@@ -89,6 +89,7 @@ class RoomHandler
 
             $response = array(
                 'encrypted' => $address
+//                'encrypted' => 'rtmp://18277.livepush.myqcloud.com/live/18277_5624ed1e532c15a542b4ff01449899?bizid=18277&txSecret=adfc2f4b623c7d2cc7f9bb1302c19ee8&txTime=5A557CD0'
             );
         } while(false);
 
