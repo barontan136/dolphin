@@ -4,6 +4,7 @@ namespace Modules;
 use Tables\Room\RoomTable;
 use Tables\User\ModerSignTable;
 use Tables\User\SignTypeTable;
+use Tables\User\UserAssetTable;
 use Tables\User\UserAuthTable;
 use Utils\Logging;
 use Tables\User\UserTable;
@@ -17,6 +18,7 @@ class UserModule
     private $userTable = null;
     private $signType = null;
     private $userCacheTable = null;
+    private $userAssets = null;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class UserModule
         $this->userCacheTable = new UserRedisTable();
         $this->log = Logging::getLogger();
         $this->signType = new SignTypeTable();
+        $this->userAssets = new UserAssetTable();
     }
 
 
@@ -131,6 +134,20 @@ class UserModule
     public function userRegister($user_data)
     {
         return $this->userTable->createUser($user_data);
+    }
+
+    /**
+     * 创建用户资产纪录
+     * @param $user_id
+     * @param $nickname
+     * @return
+     */
+    public function createUserAssetes($user_id, $nickname){
+        $data = array(
+            'user_id' => $user_id,
+            'nickname' => $nickname,
+        );
+        $this->userAssets->insert($data);
     }
 
 
@@ -274,6 +291,9 @@ class UserModule
                 'type'     => 1,
                 'status'     => 1,
             ));
+
+            // 创建用户资产纪录
+            $this->createUserAssetes($user_id, $nickname);
 
         }while(0);
 
