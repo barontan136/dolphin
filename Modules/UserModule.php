@@ -5,6 +5,7 @@ use Tables\Room\RoomTable;
 use Tables\User\ModerSignTable;
 use Tables\User\SignTypeTable;
 use Tables\User\UserAssetTable;
+use Tables\User\UserAttentionTable;
 use Tables\User\UserAuthTable;
 use Utils\Logging;
 use Tables\User\UserTable;
@@ -530,5 +531,118 @@ class UserModule
         return $result;
     }
 
+    /**
+     * @param $user_id
+     * @param $room_id
+     * @return array
+     * @throws UserException
+     */
+    public function attentionUser($user_id, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $user_info = $this->getUserInfo($user_id);
+            if (empty($user_info)) {
+                $error_code = '997002';
+                break;
+            }
 
+            $roomModule = new RoomModule();
+            $room_info = $roomModule->getRoomInfo($room_id);
+            if (empty($room_info)) {
+                $error_code = '997001';
+                break;
+            }
+
+            $userAttentionTable = new UserAttentionTable();
+            $userAttention = $userAttentionTable->getAttBetweenUsers(
+                $user_id,
+                $room_info['uid'],
+                null
+            );
+            if (empty($userAttention)) {
+                $nowTime = date('Y-m-d H:i:s');
+                $data = [
+                    'atID'            => $userAttentionTable->genId(),
+                    'beAttentionUid'  => $room_info['uid'],
+                    'beNickname'      => $room_info['nickname'],
+                    'attentionUid'    => $user_id,
+                    'Nickname'        => $user_info['nickname'],
+                    'status'          => 1,
+                    'create_datetime' => $nowTime,
+                    'update_datetime' => $nowTime,
+                ];
+                $userAttentionTable->insert($data);
+            } else {
+                $affect_row = $userAttentionTable->attentionUser($user_id, $room_info['uid']);
+                if (!$affect_row) {
+                    $error_code = '997004';
+                    break;
+                }
+            }
+
+            $response = [
+                'uid'      => $user_info['uid'],
+                'nickname' => $user_info['nickname'],
+                'level'    => $user_info['level'],
+                'type'     => $user_info['type'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new UserException($error_code);
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * @param $user_id
+     * @param $room_id
+     * @return array
+     * @throws UserException
+     */
+    public function unAttentionUser($user_id, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $user_info = $this->getUserInfo($user_id);
+            if (empty($user_info)) {
+                $error_code = '997002';
+                break;
+            }
+
+            $roomModule = new RoomModule();
+            $room_info = $roomModule->getRoomInfo($room_id);
+            if (empty($room_info)) {
+                $error_code = '997001';
+                break;
+            }
+
+            $userAttentionTable = new UserAttentionTable();
+            $affect_row = $userAttentionTable->unAttention(
+                $user_id,
+                $room_info['uid']
+            );
+            if (!$affect_row) {
+                $error_code = '997003';
+                break;
+            }
+            $response = [
+                'uid'      => $user_info['uid'],
+                'nickname' => $user_info['nickname'],
+                'level'    => $user_info['level'],
+                'type'     => $user_info['type'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new UserException($error_code);
+        }
+
+        return $response;
+    }
 }

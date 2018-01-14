@@ -125,4 +125,119 @@ class RoomModule
         return $result;
     }
 
+    /**
+     * @param $rid
+     * @return mixed
+     */
+    public function getRoomInfo($rid)
+    {
+        $roomTable = new RoomTable();
+        $result = $roomTable->getRoomInfo(['rid' => $rid]);
+        if (empty($result)) {
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $operate_id
+     * @param $setUid
+     * @return array
+     * @throws RoomException
+     */
+    public function setAdmin($operate_id, $setUid, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $operate_info = $userModule->getUserInfo($operate_id);
+
+            $set_info = $userModule->getUserInfo($setUid);
+            $roomAdminTable = new RoomAdminTable();
+            $result = $roomAdminTable->getRoomAdminByRidAndUid(
+                $room_id,
+                $setUid
+            );
+            if (!empty($result)) {
+                $nowtime = date('Y-m-d H:i:s');
+                $data = [
+                    'adminID'         => $roomAdminTable->genId(),
+                    'uid'             => $setUid,
+                    'rid'             => $room_id,
+                    'operateUid'      => $operate_info['uid'],
+                    'operateNickname' => $operate_info['nickname'],
+                    'status'          => 1,
+                    'create_datetime' => $nowtime,
+                    'update_datetime' => $nowtime,
+                ];
+                $roomAdminTable->insert($data);
+            } else {
+                $affect_row = $roomAdminTable->setRoomAdmin(
+                    $operate_id,
+                    $setUid,
+                    $room_id
+                );
+                if (!$affect_row) {
+                    $error_code = '997005';
+                    break;
+                }
+            }
+
+            $response = [
+                "operatorUid"        => $operate_id,
+                "operatorNickname"   => $operate_info['nickname'],
+                "setAdminUid"        => $setUid,
+                "setAdminNickname"   => $set_info['nickname'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new RoomException($error_code);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param $operate_id
+     * @param $setUid
+     * @return array
+     * @throws RoomException
+     */
+    public function unsetAdmin($operate_id, $setUid, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $operate_info = $userModule->getUserInfo($operate_id);
+
+            $set_info = $userModule->getUserInfo($setUid);
+            $roomAdminTable = new RoomAdminTable();
+            $affect_row = $roomAdminTable->unsetRoomAdmin(
+                $operate_id,
+                $setUid,
+                $room_id
+            );
+            if (!$affect_row) {
+                $error_code = '997006';
+                break;
+            }
+
+            $response = [
+                "operatorUid"        => $operate_id,
+                "operatorNickname"   => $operate_info['nickname'],
+                "setAdminUid"        => $setUid,
+                "setAdminNickname"   => $set_info['nickname'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new RoomException($error_code);
+        }
+
+        return $response;
+    }
 }
