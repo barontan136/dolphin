@@ -29,6 +29,9 @@ class GatewayConstants
         'login',
         'sendMsg',
         'sendGift',
-        'videoPublish'
+        'videoPublish',
+        'videoUnpublish',
+        'userAttention',
+        'userUnAttention',
     ];
 }

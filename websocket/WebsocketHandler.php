@@ -75,7 +75,7 @@ class WebsocketHandler
     {
         $user_id     = $oInput->get('uid', '');           // 用户ID
         $room_id     = $oInput->get('rid', '');           // 房间ID
-        $to_user_id  = $oInput->get('toUid ', '');        // 发送消息的对象
+        $to_user_id  = $oInput->get('toUid ', '0');        // 发送消息的对象
         $msg         = $oInput->get('msg  ', '');         // 消息内容
 
         $errcode = '0';
@@ -83,19 +83,25 @@ class WebsocketHandler
         do {
 
             $user_info = $this->user->getUserInfo($user_id);
-            $to_user_info = $this->user->getUserInfo($to_user_id);
             $response = [
                 'fromUid'     => $user_info['uid'],
                 'fromNickname'=> $user_info['nickname'],
                 'fromLevel'   => $user_info['level'],
                 'fromType'    => $user_info['type'],
-                'toUid'       => $to_user_info['user_id'],
-                'toNickname'  => $to_user_info['nickname'],
-                'toLevel'     => $to_user_info['level'],
-                'toType'      => $to_user_info['tg_type'],
+                'toUid'       => '',
+                'toNickname'  => '',
+                'toLevel'     => '',
+                'toType'      => '',
                 'msg'         => $msg,
                 'time'        => date('Y-m-d H:i:s'),
             ];
+            if (!empty($to_user_id)) {
+                $to_user_info = $this->user->getUserInfo($to_user_id);
+                $response['toUid'] = $to_user_info['user_id'];
+                $response['toNickname'] = $to_user_info['nickname'];
+                $response['toLevel'] = $to_user_info['level'];
+                $response['toType'] = $to_user_info['tg_type'];
+            }
         } while(false);
 
         return Response::api_response(
@@ -168,6 +174,56 @@ class WebsocketHandler
             $result = $roomModule->getRoomDetail($user_id, $room_id);
             $response = [
                 'videoPlayUrl' => $result['videoPlayUrl']
+            ];
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * 上报直播结束
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function videoUnpublish($oInput)
+    {
+        $errcode = '0';
+        $response = [];
+        do {
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * 用户关注主播上报
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function userAttention($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $user_info = $this->user->getUserInfo($user_id);
+            $response = [
+                'uid'      => $user_info['uid'],
+                'nickname' => $user_info['nickname'],
+                'level'    => $user_info['level'],
+                'type'     => $user_info['type'],
             ];
         } while(false);
 
