@@ -487,7 +487,6 @@ class UserModule
 //            $item['playStartTime']  = $info['rid'];
 //            $item['onlineNum']      = $info['onlineNum'];
             $item['fansNum'] = $info['fansNum'];
-            $item['announcement'] = $info['roomTitle'];
             $item['moderatorLevel'] = $info['moderatorLevel'];
             $item['verified'] = isset($info['verified']) ? $info['verified'] : '';
             $item['verifyInfo'] = isset($info['verifyInfo']) ? $info['verified'] : '';
@@ -497,6 +496,7 @@ class UserModule
 
                 $roomInfo = $roomTable->getRoomInfo(['rid'=>$item['rid']]);
                 $item['onlineNum'] = intval($roomInfo['onlineNum']);
+                $item['announcement'] = $roomInfo['roomTitle'];
                 $item['playStartTime'] = !empty($roomInfo['lastStartTime']) ? strtotime($roomInfo['lastStartTime']) : time();
             }
 
