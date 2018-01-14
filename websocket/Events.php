@@ -89,6 +89,7 @@ class Events
 
             $oInput = new WorkerInput($params, $cmd);
 //            $room_id = $oInput->get('rid', $_SESSION['room_id']);
+            $room_id = $_SESSION['rid'];
             $oInput->set('client_id', $client_id);
             $oInput->set('uid', $_SESSION['uid']);
             $oInput->set('rid', $_SESSION['rid']);
