@@ -91,10 +91,11 @@ class Events
                 array($hanlder, $cmd), array($oInput)
             );
             $logger->info(sprintf('[output][onMessage] [%s]', Logging::json_pretty($jRetStr)));
-            Gateway::sendToCurrentClient($jRetStr);
             if (in_array($cmd, $cmds_send_to_group) && ($room_id > 0)) {
                 var_dump('send to group');
                 Gateway::sendToGroup($room_id, $jRetStr);
+            } else {
+                Gateway::sendToCurrentClient($jRetStr);
             }
         } else {
             $jRetStr = json_encode(array(

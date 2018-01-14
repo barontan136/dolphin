@@ -74,7 +74,6 @@ class WebsocketHandler
     public function sendMsg($oInput)
     {
         $user_id     = $oInput->get('uid', '');           // 用户ID
-        $room_id     = $oInput->get('rid', '');           // 房间ID
         $to_user_id  = $oInput->get('toUid', '0');        // 发送消息的对象
         $msg         = $oInput->get('msg', '');         // 消息内容
 
