@@ -33,5 +33,12 @@ class GatewayConstants
         'videoUnpublish',
         'userAttention',
         'userUnAttention',
+        'userShare',
+        'setAdmin'，
+        'unsetAdmin',
+        'moderatorLevelIncrease',
+        'userLevelIncrease',
+        'onSystemMsg',
+        'onNewBulletBarrage',
     ];
 }

@@ -7,6 +7,7 @@ require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 use \GatewayWorker\Lib\Gateway;
 use Modules\GiftModule;
 use Modules\RoomModule;
+use Modules\UserException;
 use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
@@ -170,7 +171,7 @@ class WebsocketHandler
         $response = [];
         do {
             $roomModule = new RoomModule();
-            $result = $roomModule->getRoomDetail($user_id, $room_id);
+            $result = $roomModule->getRoomInfo($room_id);
             $response = [
                 'videoPlayUrl' => $result['videoPlayUrl']
             ];
@@ -217,7 +218,62 @@ class WebsocketHandler
         $errcode = '0';
         $response = [];
         do {
-            $user_info = $this->user->getUserInfo($user_id);
+            $userModule = new UserModule();
+            $response = $userModule->attentionUser($user_id, $room_id);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * 用户取消关注主播上报
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function userUnAttention($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $response = $userModule->unAttentionUser($user_id, $room_id);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * 用户分享直播间上报
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function userShare($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $user_info = $userModule->getUserInfo($user_id);
+            if (empty($user_info)) {
+                $errcode = '997002';
+                break;
+            }
             $response = [
                 'uid'      => $user_info['uid'],
                 'nickname' => $user_info['nickname'],
@@ -233,4 +289,79 @@ class WebsocketHandler
             Common::getAction(__FUNCTION__)
         );
     }
+
+    /**
+     * 设为管理员通告
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function setAdmin($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+        $setUid   = $oInput->get('setUid', '');            // 被设置的用户ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $roomModule = new RoomModule();
+            $response = $roomModule->setAdmin($user_id, $setUid, $room_id);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * 取消管理员通告
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function unsetAdmin($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+        $room_id  = $oInput->get('rid', '');            // 房间ID
+        $setUid   = $oInput->get('setUid', '');            // 被设置的用户ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $roomModule = new RoomModule();
+            $response = $roomModule->setAdmin($user_id, $setUid, $room_id);
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
+    /**
+     * @param $oInput
+     * @return mixed|string
+     */
+    public function moderatorLevelIncrease($oInput)
+    {
+        $user_id  = $oInput->get('uid', '');            // 用户ID
+
+        $errcode = '0';
+        $response = [];
+        do {
+            $roomModule = new RoomModule();
+        } while(false);
+
+        return Response::api_response(
+            $errcode,
+            ErrMessage::$message[$errcode],
+            $response,
+            Common::getAction(__FUNCTION__)
+        );
+    }
+
 }
