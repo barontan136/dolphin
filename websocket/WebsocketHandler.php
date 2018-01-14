@@ -82,14 +82,6 @@ class WebsocketHandler
         $response = [];
         do {
 
-            // 登陆时保存的room_id
-            $back_room_id = $_SESSION['room_id'];
-            if ($back_room_id != $room_id){
-                var_dump('room is not same, check it');
-                $errcode = '997001';
-                break;
-            }
-
             $user_info = $this->user->getUserInfo($user_id);
             $to_user_info = $this->user->getUserInfo($to_user_id);
             $response = [

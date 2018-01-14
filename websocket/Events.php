@@ -61,7 +61,7 @@ class Events
                 "errno" => "10003",
                 "msg" => "参数不完整"
             );
-            return Gateway::sendToCurrentClient($aResult);
+            return Gateway::sendToCurrentClient(json_encode($aResult));
         }
 
         $cmd = trim($message_data['cmd']);        //方法名称
