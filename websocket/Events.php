@@ -221,7 +221,12 @@ class Events
        if(isset($_SESSION['room_id']))
        {
            $room_id = $_SESSION['room_id'];
-           $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>date('Y-m-d H:i:s'));
+           $new_message = array(
+               'type'             => 'logout',
+               'from_client_id'   => $client_id,
+               'from_client_name' => $_SESSION['client_name'],
+               'time'             => date('Y-m-d H:i:s')
+           );
            Gateway::sendToGroup($room_id, json_encode($new_message));
        }
    }
