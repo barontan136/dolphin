@@ -47,9 +47,7 @@ class Events
 
     public static function onMessage($client_id, $message)
     {
-        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} 
-        gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  
-        client_id:$client_id session:".json_encode($_SESSION)." onMessage:".$message."\n";
+        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']} client_id:$client_id session:".json_encode($_SESSION)." onMessage:".$message."\n";
 
         $message_data = json_decode($message, true);
         $logger = Logging::getLogger();
