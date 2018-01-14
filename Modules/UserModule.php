@@ -411,6 +411,7 @@ class UserModule
             'flowerNumber' => $user_info['flowerNumber'],
             'guardType'    => $user_info['guardType'],
             'lowkeyEnter'  => $user_info['lowkeyEnter'],
+            'regMobile'    => $user_info['regMobile'],
         );
 
         return $ret_data;

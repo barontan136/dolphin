@@ -61,15 +61,11 @@ class Events
                 "errno" => "10003",
                 "msg" => "参数不完整"
             );
-            return;
+            return Gateway::sendToCurrentClient($aResult);
         }
 
-        //        $module = trim($message_data['module']);     //模块名称
         $cmd = trim($message_data['cmd']);        //方法名称
-        $params = $message_data['data'];           //请求参数,DES_CBC加密
-//        $token = $message_data['token'];            //上次服务端返回给客户端的token
-//        $ver = $message_data['version'];              //客户端版本号
-//        $pla = intval($message_data['platform']);      //客户端平台类型,0-WEB, 1-AOS, 2-IOS
+        $params = isset($message_data['data']) ? $message_data['data'] : [];           //请求参数,DES_CBC加密
 
         // 需要广播发送到房间的接口列表
         $cmds_send_to_group = \Config\GatewayConstants::BROADCAST_GROUP;
@@ -107,7 +103,7 @@ class Events
                 'errno' => '10001',
                 'msg' => '方法不存在！'
             ));
-            return;
+            return Gateway::sendToCurrentClient($jRetStr);
         }
     }
    
@@ -215,7 +211,9 @@ class Events
    public static function onClose($client_id)
    {
        // debug
-       echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
+       echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} 
+       gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  
+       client_id:$client_id onClose:''\n";
        
        // 从房间的客户端列表中删除
        if(isset($_SESSION['room_id']))
