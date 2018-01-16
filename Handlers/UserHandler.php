@@ -42,7 +42,7 @@ class UserHandler
             $dynamic = $this->userModule->getUserDynamicByUserId($user_id);
 //            if ($dynamic && isset($dynamic['accessToken']) && $access_token == $dynamic['accessToken']) {
             if (1){
-                $response = $this->userModule->getUserInfo($user_id);
+                $response = $this->userModule->getMyInfo($user_id);
             }
             else{
                 $errcode = '999006';

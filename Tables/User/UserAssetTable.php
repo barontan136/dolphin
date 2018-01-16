@@ -18,17 +18,13 @@ class UserAssetTable extends UserBase
     }
 
     /**
-     * @param $where
-     * @param $join
      * @param string $field
      * @return mixed
      */
-    public function select($join='',$where,$field='*'){
-        if(!empty($join)){
-            return $this->medoo->select($this->table().'(a)',$join,$field,$where);
-        }else{
-            return $this->medoo->select($this->table(),$field,$where);
-        }
+    public function getUserByUserId($user_id){
+        return $this->medoo->select($this->table(),
+            '*',
+            ['uid' => $user_id]);
     }
 
 }

@@ -278,6 +278,7 @@ class UserModule
                 'type'         => 1,
                 'headPic'      => $configModule->getValByKeyName('user_head_pic_default', ""),
                 'bgImg'        => $configModule->getValByKeyName('user_bg_pic_default', ""),
+                'signature'   =>  $configModule->getValByKeyName('signature_default', ""),
                 'createDatetime' => $now,
                 'updateDatetime' => $now
             );
@@ -385,6 +386,50 @@ class UserModule
         }
 
         return $data;
+    }
+
+    public function getMyInfo($user_id){
+
+        $user_info = $this->userTable->getUserInfoByUserId($user_id);
+        if (empty($user_info)){
+            return null;
+        }
+        $ret_data = array(
+            'uid' => $user_info['uid'],
+            'nickname' => $user_info['nickname'],
+            'headPic' => $user_info['headPic'],
+            'signature' => $user_info['signature'],
+            'level' => $user_info['userLevel'],
+            'rid' => $user_info['rid'],
+            'verifiedID' => isset($user_info['verifiedID'])?$user_info['verifiedID']:'',
+            'verifyInfo' => isset($user_info['verifyInfo'])?$user_info['verifyInfo']:'',
+            'sex' => $user_info['sex'],
+            'mobile' => $user_info['regMobile'],
+            'attentionNum' => $user_info['attentionNum'],
+            'isAttention' => $user_info['attentionNum']??1,
+            'fansNum' => $user_info['fansNum'],
+            'type' => $user_info['type'],
+            'birthday' => $user_info['birthday'],
+            'isFirstLogin' => $user_info['lastLogin'] ? 1 : 0,
+            'coin' => 0,                                    // 充值金币
+            'levelCoin' => $user_info['levelCoin'],       // 当前等级进度
+            'nextLevel' => $user_info['nextLevel'],
+            'nextLevelNeedCoin' => $user_info['nextLevelNeedCoin'],
+            //
+            'moderatorLevel' => $user_info['moderatorLevel'],
+            'moderatorLevelName' => $user_info['moderatorLevelName'],
+            'userLevelName' => $user_info['userLevelName'],
+            'isPlaying'    => $user_info['isPlaying'],
+            'flowerNumber' => $user_info['flowerNumber'],
+            'incomeAvailable' => 0,                        // 收入
+        );
+
+        // 获取用户资产
+        $userAssteTable = new UserAssetTable();
+        $user_asste = $userAssteTable->getUserByUserId($user_id);
+        $ret_data['coin'] = $user_asste['amount']??0;
+        $ret_data['incomeAvailable'] = $user_asste['starAmount']??0;
+        return $ret_data;
     }
 
 
