@@ -6,7 +6,7 @@
  * Time: 14:48
  */
 
-namespace Tables\Room;
+namespace Tables\Room\Cache;
 
 
 use Utils\RedisClient;
@@ -30,7 +30,7 @@ class GiftRedisTable
     public function getComboKey($user_id, $gift_id)
     {
         $str1 = substr($user_id, 0 ,16);
-        $str2 = substr($gift_id, 0 ,16);
+        $str2 = substr($gift_id, -1 ,10);
         return sprintf($this->combo_key, $str1 . $str2);
     }
 

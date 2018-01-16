@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/Bootstrap/Worker.php';
 
 use \GatewayWorker\Lib\Gateway;
 use Modules\GiftModule;
+use Modules\UserAssetModule;
 use Utils\Response;
 use Utils\Logging;
 use Config\ErrMessage;
@@ -130,24 +131,9 @@ class WebsocketHandler
         $errcode = '0';
         $response = [];
         do {
-            $user_info = $this->user->getUserInfo($user_id);
-            $giftModule = new GiftModule();
-            $gift_info = $giftModule->getGiftInfoById($p_id);
-            $response = [
-                'fromUid'       => $user_info['uid'],
-                'fromNickname'  => $user_info['nickname'],
-                'fromLevel'     => $user_info['level'],
-                'fromType'      => $user_info['type'],
-                'fromHeadPic'   => $user_info['headPic'],
-                'pid'           => $gift_info['gid'],
-                'num'           => $p_num,
-                'cost'          => $gift_info['price'],
-                'giftPic'       => $gift_info['img'],
-                'name'          => $gift_info['name'],
-                'combo'         => '',
-                'comboNum'      => '',
-                'effect'        => $gift_info['isBonus'],
-            ];
+
+
+
         } while(false);
 
         return Response::api_response(
