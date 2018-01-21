@@ -218,8 +218,12 @@ class WebsocketHandler
         $errcode = '0';
         $response = [];
         do {
-            $userModule = new UserModule();
-            $response = $userModule->attentionUser($user_id, $room_id);
+            try {
+                $userModule = new UserModule();
+                $response = $userModule->attentionUser($user_id, $room_id);
+            } catch (UserException $e) {
+                $errcode = $e->getExpCode();
+            }
         } while(false);
 
         return Response::api_response(
