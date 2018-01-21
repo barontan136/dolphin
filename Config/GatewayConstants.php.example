@@ -33,6 +33,8 @@ class GatewayConstants
         'videoUnpublish',
         'userAttention',
         'userUnAttention',
+        'gag',
+        'unGag',
         'userShare',
         'setAdmin'，
         'unsetAdmin',
