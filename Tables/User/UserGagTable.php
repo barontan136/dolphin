@@ -4,6 +4,7 @@
  */
 namespace Tables\User;
 
+use Config\GlobalConfig;
 use Tables\UserBase;
 
 class UserGagTable extends UserBase
@@ -31,4 +32,22 @@ class UserGagTable extends UserBase
         }
     }
 
+    public function updateGagStatusByAdmin($roomID, $gag_id, $op_id, $op_name)
+    {
+        $data = [
+            'updateDatetime'   => date('Y-m-d H:i:s'),
+            'status'           => GlobalConfig::GAG_ADMIN_CANCEL,
+            'operateUid'       => $op_id,
+            'operateNickName'  => $op_name
+        ];
+
+        $where = [
+            'AND' => [
+                'uid'        => $gag_id,
+                'status'     => GlobalConfig::GAG_ING,
+                'roomID'     => $roomID
+            ]
+        ];
+        return $this->medoo-update($this->table(), $data, $where);
+    }
 }

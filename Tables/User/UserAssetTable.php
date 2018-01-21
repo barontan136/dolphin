@@ -31,13 +31,35 @@ class UserAssetTable extends UserBase
         }
     }
 
+    /**
+     * @param $user_id
+     * @param int $amount
+     * @param int $starAmount
+     * @return bool
+     */
     public function incUserAsset($user_id, $amount=0, $starAmount=0)
     {
+        $nowtime = date('Y-m-d H:i:s');
+        $result = $this->findByPk($user_id);
+        if (empty($result)) {
+            $data = [
+                'amount'         => $amount,
+                'amountIn'       => $amount,
+                'starAmount'     => $starAmount,
+                'starAmountIn'   => $starAmount,
+                'createDatetime' => $nowtime,
+                'updateDatetime' => $nowtime,
+            ];
+            $this->insert($data);
+            return true;
+        }
+
         $data = [
             'amount[+]'         => $amount,
-            'amountIn[-]'       => $amount,
+            'amountIn[+]'       => $amount,
             'starAmount[+]'     => $starAmount,
-            'starAmountIn[-]'   => $starAmount,
+            'starAmountIn[+]'   => $starAmount,
+            'updateDatetime'    => $nowtime,
         ];
 
         $where = [
@@ -47,18 +69,22 @@ class UserAssetTable extends UserBase
         return $this->medoo->update($this->table(), $data, $where);
     }
 
+    /**
+     * @param $user_id
+     * @param int $amount
+     * @param int $starAmount
+     * @return mixed
+     */
     public function decUserAsset($user_id, $amount=0, $starAmount=0)
     {
-        if ($amount <= 0 && $starAmount <=0) {
-            return false;
-        }
+        $data['updateDatetime'] = date('Y-m-d H:i:s');
         if ($amount > 0) {
-            $data = ['amount[-]'] = $amount;
-            $data = ['amountOut[+]'] = $amount;
+            $data['amount[-]'] = $amount;
+            $data['amountOut[+]'] = $amount;
         }
         if ($starAmount > 0) {
-            $data = ['starAmount[-]'] = $starAmount;
-            $data = ['starAmountOut[+]'] = $starAmount;
+            $data['starAmount[-]'] = $starAmount;
+            $data['starAmountOut[+]'] = $starAmount;
         }
 
         $where = [
@@ -67,11 +93,11 @@ class UserAssetTable extends UserBase
             ]
         ];
         if ($amount > 0) {
-            $where['AND']['amount[>]'] = 0;
+            $where['AND']['amount[>=]'] = $amount;
         }
 
         if ($starAmount > 0) {
-            $where['AND']['starAmount[>]'] = 0;
+            $where['AND']['starAmount[>=]'] = $starAmount;
         }
 
         return $this->medoo->update($this->table(), $data, $where);

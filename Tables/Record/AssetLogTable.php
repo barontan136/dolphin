@@ -31,5 +31,4 @@ class AssetLogTable extends RecordBase
         }
     }
 
-
 }
