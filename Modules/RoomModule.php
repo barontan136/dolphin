@@ -240,4 +240,9 @@ class RoomModule
 
         return $response;
     }
+
+    public function gagUser($gag_uid)
+    {
+
+    }
 }
