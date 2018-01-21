@@ -21,18 +21,20 @@ class UserAttentionTable extends UserBase
      * 获取用户关注信息
      * @return mixed
      */
-    public function getAttBetweenUsers($user_id, $mod_id){
-
+    public function getAttBetweenUsers($user_id, $mod_id, $status=1){
+        $where = [
+            'AND' => [
+                'beAttentionUid' => $mod_id,
+                'attentionUid' => $user_id,
+            ]
+        ];
+        if (!is_null($status)) {
+            $where['AND']['status'] = $status;
+        }
         return $this->medoo->get(
             $this->table(),
             '*',
-            [
-                'AND' => [
-                    'beAttentionUid' => $mod_id,
-                    'attentionUid' => $user_id,
-                    'status' => 1
-                ]
-            ]
+            $where
         );
     }
     /**
@@ -62,4 +64,37 @@ class UserAttentionTable extends UserBase
         }
     }
 
+    /**
+     * @param $attention_id
+     * @param $be_attention_id
+     * @return mixed
+     */
+    public function unAttention($attention_id, $be_attention_id)
+    {
+        $data = [
+            'status'           => 2,
+            'update_datetime'  => date('Y-m-d H:i:s')
+        ];
+        $where = [
+            'beAttentionUid'  => $be_attention_id,
+            'attentionUid'    => $attention_id,
+            'status'          => 1
+        ];
+        return $this->medoo->update($this->table(), $data, $where);
+    }
+
+    public function attentionUser($attention_id, $be_attention_id)
+    {
+        $data = [
+            'status'           => 1,
+            'update_datetime'  => date('Y-m-d H:i:s')
+        ];
+        $where = [
+            'beAttentionUid'  => $be_attention_id,
+            'attentionUid'    => $attention_id,
+            'status'          => 2
+        ];
+        return $this->medoo->update($this->table(), $data, $where);
+    }
 }
+

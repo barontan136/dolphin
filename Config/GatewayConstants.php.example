@@ -23,29 +23,24 @@ class GatewayConstants
             '3.0.1' => GatewayConstants::API_NODE,
             '3.0.2' => GatewayConstants::API_NODE,
         ),
-        2 => array(
-            '3.0.0' => GatewayConstants::API_NODE,
-            '3.0.1' => GatewayConstants::API_NODE,
-            '3.0.2' => GatewayConstants::API_NODE,
-            '3.0.3' => GatewayConstants::API_NODE,
-        ),
-        3 => array(
-            '3.0.0' => GatewayConstants::API_NODE,
-        ),
-        99 => array(
-            '3.0.2' => GatewayConstants::API_NODE,
-        ),
     );
 
-    const UN_ENCRYPT_API = array (
-        'AppInit' => array(
-            'getInfo'
-        ),
-        'TimerTask' => array(
-            'test',
-        ),
-        'AdminRequest' => array(
-            'orderPaid',
-        )
-    );
+    const BROADCAST_GROUP = [
+        'login',
+        'sendMsg',
+        'sendGift',
+        'videoPublish',
+        'videoUnpublish',
+        'userAttention',
+        'userUnAttention',
+        'gag',
+        'unGag',
+        'userShare',
+        'setAdmin'，
+        'unsetAdmin',
+        'moderatorLevelIncrease',
+        'userLevelIncrease',
+        'onSystemMsg',
+        'onNewBulletBarrage',
+    ];
 }

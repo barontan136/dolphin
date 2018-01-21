@@ -53,6 +53,10 @@ class GiftModule
                 $errcode = '998007';
                 break;
             }
+            $affected_row = $userAssetModule->decUserAsset($user_id, $cost_amount);
+            if (!$affected_row) {
+
+            }
 
 
             $userModule = new UserModule();

@@ -84,11 +84,11 @@ class ConfigModule
      * @return string
      */
     public function getUserpublishDomain($roomID){
-
-        return sprintf(
-            $this->getValByKeyName('root_domain_play',"rtmp://push.szxiawa.com/%s/%s?auth_key="),
-            $this->getValByKeyName('stream_app_name','xiawaNormal'),
-            $roomID);
+        return Common::get_push_url(Rtmp::$tx_biz_id, $roomID);
+//        return sprintf(
+//            $this->getValByKeyName('root_domain_play',"rtmp://push.szxiawa.com/%s/%s?auth_key="),
+//            $this->getValByKeyName('stream_app_name','xiawaNormal'),
+//            $roomID);
     }
     /**
      * 获取主播发布/推送地址
@@ -97,7 +97,8 @@ class ConfigModule
      */
     public function getUserPlayDomain($roomID){
 
-        return Common::get_play_url(Rtmp::$tx_biz_id, $roomID);
+        $txTime = date("Y-m-d H:i:s", strtotime("+1 day"));
+        return Common::get_push_url(Rtmp::$tx_biz_id, $roomID, Rtmp::$tx_push_key, $txTime);
         /*
         return sprintf(
             $this->getValByKeyName('root_domain_publish',"rtmp://video-center.alivecdn.com/%s/%s?vhost=push.szxiawa.com"),

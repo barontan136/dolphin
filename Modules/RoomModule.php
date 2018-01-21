@@ -41,7 +41,7 @@ class RoomModule
         if (!isset($roomInfo['videoPublishDomain']) || $roomInfo['videoPublishDomain'] == ''){
             return '';
         }
-        $txTime = date("Y-m-d H:i:s", strtotime("+1 day"));
+        $txTime = date("Y-m-d") . " 23:59:59";
         $path = Common::get_push_url(Rtmp::$tx_biz_id, $rid, Rtmp::$tx_push_key, $txTime);
 //
 //        // 获取鉴权后的推送URL
@@ -79,39 +79,39 @@ class RoomModule
                 'weight' => 0,
                 'height' => 0,
                 'age' => 0,
-                'trueName' => isset($userInfo['realName']) ?? '',
-                'nickname' => isset($userInfo['nickname']) ?? '',
-                'id' => isset($userInfo['mid']) ?? '',
-                'moderatorLevel' => isset($userInfo['moderatorLevel']) ?? '',
-                'nextLevelNeed' => isset($userInfo['moderatorNextLevelNeedCoin']) ?? '',
-                'levelEarnCoin' => isset($userInfo['moderatorLevelCoin']) ?? '',
-                'headPic' => isset($userInfo['headPic']) ?? '',
-                'verified' => isset($userInfo['verified']) ? $userInfo['verified'] : '',
-                'verifyInfo' => isset($userInfo['verifyInfo']) ? $userInfo['verifyInfo'] : '',
+                'trueName' => $userInfo['realName']?? '',
+                'nickname' => $userInfo['nickname'] ?? '',
+                'id' => $userInfo['mid'] ?? '',
+                'moderatorLevel' => $userInfo['moderatorLevel'] ?? '',
+                'nextLevelNeed' => $userInfo['moderatorNextLevelNeedCoin'] ?? '',
+                'levelEarnCoin' => $userInfo['moderatorLevelCoin'] ?? '',
+                'headPic' => userInfo['headPic'] ?? '',
+                'verified' => $userInfo['verified'] ? $userInfo['verified'] : '',
+                'verifyInfo' => $userInfo['verifyInfo'] ? $userInfo['verifyInfo'] : '',
                 'earnCoin' => 0,
             );
 
             $result = array(
-                'rid' => isset($roomInfo['rid']) ?? '',
-                'autoID' => isset($roomInfo['autoID']) ?? '',
-                'msgIP' => isset($roomInfo['msgIP']) ?? '',
-                'msgPort' => isset($roomInfo['msgPort']) ?? '',
-                'videoPlayDomain' => isset($roomInfo['videoPlayDomain']) ?? '',
-                'videoPublishDomain' => isset($roomInfo['videoPublishDomain']) ?? '',
-                'videoPath' => isset($roomInfo['videoPath']) ?? '',
+                'rid' => $roomInfo['rid']?? '',
+                'autoID' => $roomInfo['autoID'] ?? '',
+                'msgIP' => $roomInfo['msgIP'] ?? '',
+                'msgPort' => $roomInfo['msgPort'] ?? '',
+                'videoPlayDomain' => $roomInfo['videoPlayDomain'] ?? '',
+                'videoPublishDomain' => $roomInfo['videoPublishDomain'] ?? '',
+                'videoPath' => $roomInfo['videoPath'] ?? '',
                 'videoStreamName' => Common::get_play_url(Rtmp::$tx_biz_id, $roomInfo['rid']),
                 'videoPlayUrl' => Common::get_play_url(Rtmp::$tx_biz_id, $roomInfo['rid']),
-                'flowerNumber' => isset($roomInfo['flowerNumber']) ?? '',
-                'isPlaying' => isset($roomInfo['isPlaying']) ?? '',
-                'onlineNum' => isset($roomInfo['onlineNum']) ?? '',
-                'danmuBg' => isset($roomInfo['danmuBg']) ?? '',
-                'shareTitle' => isset($roomInfo['shareTitle']) ?? '',
-                'shareContent' => isset($roomInfo['shareContent']) ?? '',
-                'sharePic' => isset($roomInfo['sharePic']) ?? '',
-                'shareUrl' => isset($roomInfo['shareUrl']) ?? '',
-                'private' => isset($roomInfo['private']) ?? '',
+                'flowerNumber' => $roomInfo['flowerNumber'] ?? '',
+                'isPlaying' => $roomInfo['isPlaying'] ?? '',
+                'onlineNum' => $roomInfo['onlineNum'] ?? '',
+                'danmuBg' => $roomInfo['danmuBg'] ?? '',
+                'shareTitle' => $roomInfo['shareTitle'] ?? '',
+                'shareContent' => $roomInfo['shareContent'] ?? '',
+                'sharePic' => $roomInfo['sharePic'] ?? '',
+                'shareUrl' => $roomInfo['shareUrl'] ?? '',
+                'private' => $roomInfo['private'] ?? '',
                 'messages' => '',
-                'userType' => isset($userInfo['type']) ?? '',
+                'userType' => $userInfo['type'] ?? '',
                 //
                 'isGuard' => 0,
                 'loved' => $love ? 'true' : 'false',
@@ -125,4 +125,124 @@ class RoomModule
         return $result;
     }
 
+    /**
+     * @param $rid
+     * @return mixed
+     */
+    public function getRoomInfo($rid)
+    {
+        $roomTable = new RoomTable();
+        $result = $roomTable->getRoomInfo(['rid' => $rid]);
+        if (empty($result)) {
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $operate_id
+     * @param $setUid
+     * @return array
+     * @throws RoomException
+     */
+    public function setAdmin($operate_id, $setUid, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $operate_info = $userModule->getUserInfo($operate_id);
+
+            $set_info = $userModule->getUserInfo($setUid);
+            $roomAdminTable = new RoomAdminTable();
+            $result = $roomAdminTable->getRoomAdminByRidAndUid(
+                $room_id,
+                $setUid
+            );
+            if (!empty($result)) {
+                $nowtime = date('Y-m-d H:i:s');
+                $data = [
+                    'adminID'         => $roomAdminTable->genId(),
+                    'uid'             => $setUid,
+                    'rid'             => $room_id,
+                    'operateUid'      => $operate_info['uid'],
+                    'operateNickname' => $operate_info['nickname'],
+                    'status'          => 1,
+                    'create_datetime' => $nowtime,
+                    'update_datetime' => $nowtime,
+                ];
+                $roomAdminTable->insert($data);
+            } else {
+                $affect_row = $roomAdminTable->setRoomAdmin(
+                    $operate_id,
+                    $setUid,
+                    $room_id
+                );
+                if (!$affect_row) {
+                    $error_code = '997005';
+                    break;
+                }
+            }
+
+            $response = [
+                "operatorUid"        => $operate_id,
+                "operatorNickname"   => $operate_info['nickname'],
+                "setAdminUid"        => $setUid,
+                "setAdminNickname"   => $set_info['nickname'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new RoomException($error_code);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param $operate_id
+     * @param $setUid
+     * @return array
+     * @throws RoomException
+     */
+    public function unsetAdmin($operate_id, $setUid, $room_id)
+    {
+        $error_code = '';
+        $response = [];
+        do {
+            $userModule = new UserModule();
+            $operate_info = $userModule->getUserInfo($operate_id);
+
+            $set_info = $userModule->getUserInfo($setUid);
+            $roomAdminTable = new RoomAdminTable();
+            $affect_row = $roomAdminTable->unsetRoomAdmin(
+                $operate_id,
+                $setUid,
+                $room_id
+            );
+            if (!$affect_row) {
+                $error_code = '997006';
+                break;
+            }
+
+            $response = [
+                "operatorUid"        => $operate_id,
+                "operatorNickname"   => $operate_info['nickname'],
+                "setAdminUid"        => $setUid,
+                "setAdminNickname"   => $set_info['nickname'],
+            ];
+        } while (false);
+
+        if ($error_code) {
+            throw new RoomException($error_code);
+        }
+
+        return $response;
+    }
+
+    public function gagUser($gag_uid)
+    {
+
+    }
 }
