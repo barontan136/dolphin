@@ -44,7 +44,7 @@ class WebsocketHandler
         do {
             try {
                 $roomModule = new RoomModule();
-                $roomModule->loginRoom(
+                $response = $roomModule->loginRoom(
                     $user_id,
                     $client_id,
                     $room_id
@@ -133,7 +133,7 @@ class WebsocketHandler
         do {
             try {
                 $giftModule = new GiftModule();
-                $giftModule->sendGift($user_id, $room_id, $p_id, $p_num);
+                $response = $giftModule->sendGift($user_id, $room_id, $p_id, $p_num);
             } catch (GiftException $e) {
                 $errcode = $e->getExpCode();
             } catch (\Exception $e) {
