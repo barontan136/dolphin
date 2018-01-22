@@ -565,6 +565,7 @@ class UserModule
             $item['verified'] = isset($info['verified']) ? $info['verified'] : '';
             $item['verifyInfo'] = isset($info['verifyInfo']) ? $info['verified'] : '';
             $item['videoPlayUrl'] = $info['videoPlayUrl'];
+            $item['city'] = '外星人';
 
             if (isset($item['rid']) && !empty($item['rid'])) {
 
