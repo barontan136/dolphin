@@ -490,8 +490,8 @@ class RoomModule
         $error_code = '';
         $response = [];
         do {
-
-            $user_info = $this->user->getUserInfo($user_id);
+            $userModule = new UserModule();
+            $user_info = $userModule->getUserInfo($user_id);
 
             $data = [
                 'onlineNum[+]'    => 1,
