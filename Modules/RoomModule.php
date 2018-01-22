@@ -91,7 +91,7 @@ class RoomModule
                 'moderatorLevel' => $userInfo['moderatorLevel'] ?? '',
                 'nextLevelNeed' => $userInfo['moderatorNextLevelNeedCoin'] ?? '',
                 'levelEarnCoin' => $userInfo['moderatorLevelCoin'] ?? '',
-                'headPic' => userInfo['headPic'] ?? '',
+                'headPic' => $userInfo['headPic'] ?? '',
                 'verified' => $userInfo['verified'] ? $userInfo['verified'] : '',
                 'verifyInfo' => $userInfo['verifyInfo'] ? $userInfo['verifyInfo'] : '',
                 'earnCoin' => 0,

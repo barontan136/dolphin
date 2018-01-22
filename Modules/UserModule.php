@@ -388,6 +388,11 @@ class UserModule
         return $data;
     }
 
+    /**
+     * 获取用户个人信息
+     * @param string $user_id
+     * @return mixed
+     */
     public function getMyInfo($user_id){
 
         $user_info = $this->userTable->getUserInfoByUserId($user_id);
