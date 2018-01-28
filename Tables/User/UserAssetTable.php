@@ -39,6 +39,7 @@ class UserAssetTable extends UserBase
         $result = $this->findByPk($user_id);
         if (empty($result)) {
             $data = [
+                'uid'            => $user_id,
                 'amount'         => $amount,
                 'amountIn'       => $amount,
                 'starAmount'     => $starAmount,
