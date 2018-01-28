@@ -89,25 +89,28 @@ class GiftModule
                 $userModule
             ){
                 $mod_id = $room_info['uid'];//主播ID
-                //扣除送礼人的账户余额
-                $affected_row = $userAssetModule->decUserAsset(
-                    $user_id,
-                    $cost_amount,
-                    0,
-                    GlobalConfig::OT_SEND_GIFT
-                );
-                if (!$affected_row) {
-                    throw new \Exception('decUserAsset failed');
-                }
-
-                $affected_row = $userAssetModule->incUserAsset(
-                    $mod_id,
-                    0,
-                    $cost_amount,
-                    GlobalConfig::OT_RECEIVE_GIFT
-                );
-                if (!$affected_row) {
-                    throw new \Exception('incUserAsset failed');
+                try {
+                    //扣除送礼人的账户余额
+                    $affected_row = $userAssetModule->decUserAsset(
+                        $user_id,
+                        $cost_amount,
+                        0,
+                        GlobalConfig::OT_SEND_GIFT
+                    );
+                    if (!$affected_row) {
+                        throw new \Exception('decUserAsset failed');
+                    }
+                    $affected_row = $userAssetModule->incUserAsset(
+                        $mod_id,
+                        0,
+                        $cost_amount,
+                        GlobalConfig::OT_RECEIVE_GIFT
+                    );
+                    if (!$affected_row) {
+                        throw new \Exception('incUserAsset failed');
+                    }
+                } catch (UserAssetException $e) {
+                    throw new \Exception($e->getExpCode());
                 }
 
                 $mod_info = $userModule->getUserInfo($mod_id);

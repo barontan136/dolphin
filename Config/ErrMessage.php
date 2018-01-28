@@ -5,6 +5,7 @@ class ErrMessage
 {
     public static $message = array(
         '0' => '成功',
+        '999999' => '系统错误',
         '999005' => '提交参数有误',
         '999006' => 'accessToken过期或不存在',
         '998001' => '短信发送失败',
