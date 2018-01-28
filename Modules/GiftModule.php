@@ -66,7 +66,7 @@ class GiftModule
                 break;
             }
 
-            $cost_amount = $this->getCostAmount($p_num, $gift_info['cost']);
+            $cost_amount = $this->getCostAmount($p_num, $gift_info['price']);
             if ($user_asset['amount'] < $cost_amount) {
                 $errcode = '998007';
                 break;
