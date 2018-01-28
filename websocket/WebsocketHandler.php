@@ -136,6 +136,7 @@ class WebsocketHandler
                 $response = $giftModule->sendGift($user_id, $room_id, $p_id, $p_num);
             } catch (GiftException $e) {
                 $errcode = $e->getExpCode();
+                break;
             } catch (\Exception $e) {
                 $this->log->error(
                     sprintf('[%s][exception msg][%s]', __FUNCTION__, $e->getMessage())
@@ -162,7 +163,7 @@ class WebsocketHandler
     {
         $user_id  = $oInput->get('uid', '');            // 用户ID
         $room_id  = $oInput->get('rid', '');            // 房间ID
-        $autoRetry  = $oInput->get('autoRetry', '');
+        $autoRetry  = $oInput->get('autoRetry', '');  //如果为true，你不需要发送广播，如果是false你需要发送广播
 
         $errcode = '0';
         $response = [];

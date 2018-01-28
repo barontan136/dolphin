@@ -62,7 +62,7 @@ class UserAssetModule
                     $starAmount
                 );
                 if (!$affect_row) {
-                    throw new ('incUserAsset failed');
+                    throw new \Exception('incUserAsset failed');
                 }
 
                 $assetLogTable = new AssetLogTable();
@@ -127,7 +127,7 @@ class UserAssetModule
                     $starAmount
                 );
                 if (!$affect_row) {
-                    throw new ('decUserAsset failed');
+                    throw new \Exception('decUserAsset failed');
                 }
 
                 $assetLogTable = new AssetLogTable();
