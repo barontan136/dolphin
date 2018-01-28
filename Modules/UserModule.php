@@ -144,9 +144,12 @@ class UserModule
      * @return
      */
     public function createUserAssetes($user_id, $nickname){
+        $now_time = date('Y-m-d H:i:s');
         $data = array(
-            'user_id' => $user_id,
-            'nickname' => $nickname,
+            'uid'             => $user_id,
+            'nickname'        => $nickname,
+            'createDatetime'  => $now_time,
+            'updateDatetime'  => $now_time,
         );
         $this->userAssets->insert($data);
     }
